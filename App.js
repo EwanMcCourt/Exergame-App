@@ -14,10 +14,12 @@ export default function App() {
       await AsyncStorage.setItem(
         '@count',
         count.toString()
+        
       );
+      console.log("value set",count)
     } catch (error) {
       // Error saving data
-      console.log("eror", error.message);
+      console.log("error: ", error.message);
     }
   };
   const _retrieveData = async () => {
@@ -29,24 +31,22 @@ export default function App() {
         setCount(parseInt(value))
       }
     } catch (error) {
-      console.log("error")
-      // Error retrieving data
+      console.log("error: ", error.message);
     }
   };
   const incrementCount = () => {
     setCount(count + 1);
-    _storeData();
   }
   const decrementCount = () => {
     setCount(count - 1);
-    _storeData();
   };
   useEffect(() => {
-    async function retrieveData() {
-      await _retrieveData();
-    }
-    retrieveData();
+    _retrieveData();
+    _storeData();
   }, []);
+  useEffect(() => {
+    _storeData();
+  }, [count]);
 
   return (
     <View style={styles.container}>
