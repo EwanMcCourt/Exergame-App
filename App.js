@@ -92,7 +92,7 @@ export default function App() {
   
 
   useEffect(() => {
-    if (pastStepCount > 3) {
+    if (pastStepCount > 10) {
       setCount(count + pastStepCount)
     }
   }, [pastStepCount]);
