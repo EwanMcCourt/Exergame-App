@@ -5,7 +5,7 @@ const backgroundimage = {uri: "https://live.staticflickr.com/4242/35699339972_4c
 const icon = {uri:"https://cdn3.iconfinder.com/data/icons/nature-animals/512/Bird-512.png"};
 
 
-function LoginScreen(props) {
+function MonsterScreen({ navigation }) {
     return (
         <ImageBackground  
         
@@ -16,7 +16,7 @@ function LoginScreen(props) {
           >
             <View style = {styles.titleContainer}>
                 <Image style = {styles.logo} source = {icon}/>
-                <Text> Bird watching </Text>
+                <Text> This is the monster screen </Text>
             </View>
             
         </ImageBackground> 
@@ -46,4 +46,4 @@ const styles = StyleSheet.create({
         top: 30,
     },
 })
-export default LoginScreen;
+export default MonsterScreen;

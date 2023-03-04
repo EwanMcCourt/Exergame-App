@@ -5,7 +5,7 @@ import { StyleSheet, ImageBackground, View, Image, Text, Button,TouchableOpacity
 const backgroundimage = {uri: "https://live.staticflickr.com/4242/35699339972_4ce24484ee_b.jpg"};
 const icon = {uri:"https://cdn3.iconfinder.com/data/icons/nature-animals/512/Bird-512.png"};
 
-function WelcomeScreen(props) {
+function WelcomeScreen({ navigation }) {
     return (
          
         <ImageBackground  
@@ -19,7 +19,7 @@ function WelcomeScreen(props) {
                 <Image style = {styles.logo} source = {icon}/>
                 <Text> Bird Watching </Text>
             </View>
-            <TouchableHighlight style = {styles.loginButton} underlayColor='#d45404' onPress={() => console.log("hi")}> 
+            <TouchableHighlight style = {styles.loginButton} underlayColor='#d45404' onPress={() => navigation.navigate('Map')}> 
                  <View >
                
                   <Text style = {styles.buttonText}>
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     loginButton:{
         width:"100%",
         height: 70,
-        backgroundColor: "coral",
+        backgroundColor: "red",
         alignItems:"center",
         justifyContent: "center",
     },
