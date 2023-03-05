@@ -116,6 +116,11 @@ export default function App() {
       console.log("error: ", error.message);
     }
   };
+
+  const logCoords = async () =>{
+   coords = (await Location.getCurrentPositionAsync()).coords
+    console.log(coords)
+  }
   const incrementCount = () => {
     setCount(count + 1);
   };
@@ -152,6 +157,7 @@ export default function App() {
         <Button title="clear" onPress={clearStorage} />
         <Button title="load" onPress={loadSteps} />
         <Button title="check permissions" onPress={checkLocationPerms} />
+        <Button title="log coords" onPress={logCoords} />
       </View>
     </View>
   );
