@@ -2,8 +2,8 @@ import React from 'react';
 import { StyleSheet, ImageBackground, View, Image, Text, Button,TouchableOpacity, TouchableHighlight } from 'react-native';
 
 
-const backgroundimage = {uri: "https://live.staticflickr.com/4242/35699339972_4ce24484ee_b.jpg"};
-const icon = {uri:"https://cdn3.iconfinder.com/data/icons/nature-animals/512/Bird-512.png"};
+const backgroundimage = {uri: "https://w0.peakpx.com/wallpaper/287/911/HD-wallpaper-trex-dinosaur-trex-tyrannosaurus.jpg"};
+const icon = {uri:"http://clipart-library.com/images/6cr54jKgi.gif"};
 
 function WelcomeScreen({ navigation }) {
     return (
@@ -17,9 +17,9 @@ function WelcomeScreen({ navigation }) {
           >
             <View style = {styles.titleContainer}>
                 <Image style = {styles.logo} source = {icon}/>
-                <Text> Bird Watching </Text>
+                <Text style = {styles.title}> MonsterFit </Text>
             </View>
-            <TouchableHighlight style = {styles.loginButton} underlayColor='#d45404' onPress={() => navigation.navigate('Map')}> 
+            <TouchableHighlight style = {styles.loginButton} underlayColor='#fb9250' onPress={() => navigation.navigate('Map')}> 
                  <View >
                
                   <Text style = {styles.buttonText}>
@@ -29,7 +29,7 @@ function WelcomeScreen({ navigation }) {
                  </View>
             </TouchableHighlight >
             
-            <TouchableHighlight style = {styles.registerButton}underlayColor="#4ca305" onPress={() => console.log("hi")}> 
+            <TouchableHighlight style = {styles.registerButton}underlayColor="#800000" onPress={() => console.log("hi")}> 
                  <View >
                
                   <Text style = {styles.buttonText}>
@@ -54,35 +54,41 @@ const styles = StyleSheet.create({
     buttonText:{
         color: "white",
         fontSize: 30,
-        width:"100%",
-        height: 70,
+  
+     
         
     },
     loginButton:{
         width:"100%",
         height: 70,
-        backgroundColor: "red",
+        
+        backgroundColor: "#d45404",
         alignItems:"center",
         justifyContent: "center",
     },
     logo:{
         width:100,
         height:100,
-        alignItems:"center",
-        
-        
+        left:45,
         
     },
     registerButton:{
         width:"100%",
         height: 70,
-        backgroundColor: "lightgreen",
+        backgroundColor: "#330000",
         alignItems:"center",
         justifyContent: "center",
+    },
+    title:{
+        fontWeight:"bold",
+        color:"white",
+        fontSize:35,
+       
     },
     titleContainer:{
         position: "absolute",
         top: 30,
+        
     },
 })
 export default WelcomeScreen;

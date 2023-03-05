@@ -12,6 +12,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 
 //Screens
 import WelcomeScreen from './app/screens/WelcomeScreen';
+import SettingsScreen from './app/screens/SettingsScreen';
 import MapScreen from './app/screens/MapScreen';
 import MonsterScreen from './app/screens/MonsterScreen';
 import CastleScreen from './app/screens/CastleScreen';
@@ -67,6 +68,7 @@ function Map() {
       options={{ tabBarLabel: 'Castle' }}
     />
   </Tab.Navigator>
+  
   );
 }
 
@@ -84,7 +86,9 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
-      </Stack.Navigator>
+        <Stack.Screen name="Settings" component={SettingsScreen} />
+      </Stack.Navigator> 
     </NavigationContainer>
+   
   );
 }
