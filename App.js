@@ -1,5 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Button,
+  StyleSheet,
+  PermissionsAndroid,
+} from "react-native";
 import { Pedometer } from "expo-sensors"; // https://docs.expo.dev/versions/latest/sdk/pedometer/ (requires install -npx expo install expo-sensors)
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Location from "expo-location";
@@ -13,13 +19,42 @@ export default function App() {
   const [lastStepCount, setLastStepCount] = useState(0);
   const [lessCurrentStepCount, setLessCurrentStepCount] = useState(0);
 
+  const requestPedometerPerms = async () => { // pedometer permissions do not work on android !! 
+    // try{
+    //   console.log("requesting")
+    //   const granted = await PermissionsAndroid.request(
+    //     PermissionsAndroid.PERMISSIONS.CAMERA
+    //   )
+    //   console.log("checking if granted")
+    //   if(granted === PermissionsAndroid.RESULTS.granted){
+    //   console.log("perms granted")
+    //   }
+    //   else{
+    //     console.log("denied")
+    //   }
+    // }
+    // catch(e){
+    //     console.log(e)
+    // }
+  };
+  requestPedometerPerms();
+  Pedometer.requestPermissionsAsync().then((perms)=>{
+    console.log(perms)
+  })
+  
+
   const prevStepCountRef = useRef(null);
+  Pedometer.getPermissionsAsync().then((perms) => {
+    console.log("permission status " + perms.status);
+  });
 
   const subscribe = async () => {
     const isAvailable = await Pedometer.isAvailableAsync();
+    console.log(String(isAvailable));
     setIsPedometerAvailable(String(isAvailable));
 
     if (isAvailable) {
+      console.log("pedometer avaiable watching steps now");
       return Pedometer.watchStepCount((result) => {
         console.log("live steps", result.steps);
         const currentStepCount = result.steps;
@@ -108,7 +143,7 @@ export default function App() {
       if (value !== null) {
         const date = new Date(Date.parse(value));
         console.log(date.toLocaleTimeString());
-        await getSteps(date);
+        // await getSteps(date);
       }
     } catch (error) {
       console.log("error: ", error.message);
