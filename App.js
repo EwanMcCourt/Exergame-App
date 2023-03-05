@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, Button, StyleSheet, Platform  } from 'react-native';
 import { Pedometer } from 'expo-sensors';   // https://docs.expo.dev/versions/latest/sdk/pedometer/ (requires install -npx expo install expo-sensors)
 import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function App() {
@@ -84,7 +84,9 @@ export default function App() {
       if (value !== null) {
         const date = new Date(Date.parse(value));
         console.log(date.toLocaleTimeString())
-        await getSteps(date);
+        if (Platform.OS === 'ios') {
+          await getSteps(date);
+        }
       }
     } catch (error) {
       console.log("error: ", error.message);
