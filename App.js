@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, Button, StyleSheet, Platform  } from 'react-native';
 import { Pedometer } from 'expo-sensors';   // https://docs.expo.dev/versions/latest/sdk/pedometer/ (requires install -npx expo install expo-sensors)
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import GoogleFit, { Scopes } from 'react-native-google-fit' // npm install react-native-google-fit
 export default function App() {
   const [count, setCount] = useState(0);
   const [isPedometerAvailable, setIsPedometerAvailable] = useState('checking');
@@ -14,7 +13,6 @@ export default function App() {
   const prevStepCountRef = useRef(null);
 
   const subscribe = async () => {
-    if (Platform.OS === 'ios'){
     const isAvailable = await Pedometer.isAvailableAsync();
     setIsPedometerAvailable(String(isAvailable));
   
@@ -27,20 +25,8 @@ export default function App() {
         setCurrentStepCount(stepDifference);
         prevStepCountRef.current = currentStepCount;
       });
-    }}
-    else if (Platform.OS === 'android'){
-      const options = {
-        scopes: [
-          Scopes.FITNESS_ACTIVITY_READ,
-          Scopes.FITNESS_ACTIVITY_WRITE,
-          Scopes.FITNESS_BODY_READ,
-          Scopes.FITNESS_BODY_WRITE,
-        ],
-      }
-      return GoogleFit.startRecording((result => {
-        console.log(result);
-      }))
-      
+    } else {
+      setCount(-1);
     }
   };
   const getSteps = async (old_date) => {
