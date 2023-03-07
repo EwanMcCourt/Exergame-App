@@ -8,8 +8,6 @@ export default function App() {
   const [isPedometerAvailable, setIsPedometerAvailable] = useState('checking');
   const [pastStepCount, setPastStepCount] = useState(0);
   const [currentStepCount, setCurrentStepCount] = useState(0);
-  const [lastStepCount, setLastStepCount] = useState(0);
-  const [lessCurrentStepCount, setLessCurrentStepCount] = useState(0);
   const [mDate, setMDate] = useState(new Date());
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
@@ -17,7 +15,7 @@ export default function App() {
   
 
   
-  const prevStepCountRef = useRef(null);
+  
 
   const subscribe = async () => {
     const isAvailable = await Pedometer.isAvailableAsync();
