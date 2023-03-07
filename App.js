@@ -146,13 +146,13 @@ export default function App() {
   }, [mDate]);
   
   useEffect(() => {
-    const interval = setInterval(() => {
-
+    const timeout = setTimeout(() => {
+      console.log("checking if 0 time left")
       if (days <= 0 && hours <= 0 && minutes <= 0){
         console.log("do the monster fight here");
       }
     }, 3000);
-    return () => clearInterval(interval);
+    return () => clearInterval(timeout);
   }, [minutes]);
   
   useEffect(() => {
