@@ -4,6 +4,7 @@ import { Pedometer } from 'expo-sensors';   // https://docs.expo.dev/versions/la
 import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function App() {
   const [count, setCount] = useState(0);
+  const [initalCount, setInitalCount] = useState(0);
   const [isPedometerAvailable, setIsPedometerAvailable] = useState('checking');
   const [pastStepCount, setPastStepCount] = useState(0);
   const [currentStepCount, setCurrentStepCount] = useState(0);
@@ -25,11 +26,7 @@ export default function App() {
     if (isAvailable) {
       return Pedometer.watchStepCount(result => {
         console.log("live steps", result.steps)
-        const currentStepCount = result.steps;
-        const prevStepCount = prevStepCountRef.current;
-        const stepDifference = prevStepCount === null ? 0 : currentStepCount - prevStepCount;
-        setCurrentStepCount(stepDifference);
-        prevStepCountRef.current = currentStepCount;
+        setCurrentStepCount(result.steps)
       });
     } else {
       setCount(-1);
@@ -72,7 +69,8 @@ export default function App() {
     try {
       const value = await AsyncStorage.getItem('@count');
       if (value !== null) {
-        setCount(parseInt(value))
+        setCount(parseInt(value));
+        setInitalCount(parseInt(value));
         console.log("value retreived at ", parseInt(value))
       } 
     } catch (error) {
@@ -164,7 +162,7 @@ export default function App() {
     return () => subscription && subscription.remove();
   }, []);
   useEffect(() => {
-    setCount(prevCount => prevCount + currentStepCount)
+    setCount(initalCount + currentStepCount);
   }, [currentStepCount]);
 
   
