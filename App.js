@@ -9,6 +9,12 @@ export default function App() {
   const [currentStepCount, setCurrentStepCount] = useState(0);
   const [lastStepCount, setLastStepCount] = useState(0);
   const [lessCurrentStepCount, setLessCurrentStepCount] = useState(0);
+  const [mDate, setMDate] = useState(new Date());
+  const [days, setDays] = useState(0);
+  const [hours, setHours] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+  
+
   
   const prevStepCountRef = useRef(null);
 
@@ -30,6 +36,10 @@ export default function App() {
     }
   };
   const getSteps = async (old_date) => {
+    const isAvailable = await Pedometer.isAvailableAsync();
+    setIsPedometerAvailable(String(isAvailable));
+  
+    if (isAvailable){
     const end = new Date();
     const pastStepCountResult = await Pedometer.getStepCountAsync(old_date, end);
     console.log("checking this time", old_date.toLocaleTimeString(), old_date.toISOString())
@@ -38,7 +48,7 @@ export default function App() {
       console.log(pastStepCountResult.steps)
     }
     
-
+  }
   };
   const clearStorage = async () => {
     try {
@@ -89,27 +99,65 @@ export default function App() {
         if (Platform.OS === 'ios') {
           await getSteps(date);
         }
+      } 
+    } catch (error) {
+      console.log("error: ", error.message);
+      
+    }
+  };
+  const getTimes = () => {
+    console.log("trying to set days,hours,mins", mDate.toDateString());
+    const days_with_rem = (mDate.getTime() - new Date().getTime())/ (1000 * 60 * 60 * 24);
+    setDays(Math.floor(days_with_rem));
+    const hours_with_rem = ((days_with_rem - (Math.floor(days_with_rem)))*24)
+    setHours(Math.floor(hours_with_rem))
+    const mins_with_rem = ((hours_with_rem - Math.floor(hours_with_rem))*60)
+    setMinutes(Math.floor(mins_with_rem));
+    };
+  const loadMonsterDate = async () => {
+    console.log("running load date")
+    try {
+      const value = await AsyncStorage.getItem('@mdate');
+      if (value !== null) {
+        const date = new Date(Date.parse(value));
+        setMDate(date)
+      }else {
+        const mdate = new Date();
+        mdate.setDate(mdate.getDate() + 7);
+        await AsyncStorage.setItem('@mdate',mdate.toISOString())
+        setMDate(mdate)
       }
     } catch (error) {
       console.log("error: ", error.message);
       
     }
   };
-  const incrementCount = () => {
-    setCount(count + 1);
-  }
-  const decrementCount = () => {
-    setCount(count - 1);
-    
-  };
   useEffect(() => {
     loadSteps();
     loadOldDate();
+    loadMonsterDate();
   }, []);
   useEffect(() => {
     storeSteps();
     storeDate();
   }, [count]);
+  useEffect(() => {
+    getTimes();
+    const interval = setInterval(() => {
+      getTimes();
+    }, 30000);
+    return () => clearInterval(interval);
+  }, [mDate]);
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+
+      if (days <= 0 && hours <= 0 && minutes <= 0){
+        console.log("do the monster fight here");
+      }
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [minutes]);
   
   useEffect(() => {
     const subscription = subscribe();
@@ -122,14 +170,10 @@ export default function App() {
   
   return(
     <View style={styles.container}>
-      <Text>Steps after opening the app: {currentStepCount}</Text>
-      <Text>Steps after opening the app, lagging one step behind: {lastStepCount}</Text>
-      <Text style={styles.text}>Count: {count}</Text>
+      <Text style={styles.text}>Days: {days} Hours: {hours} Minutes: {minutes}</Text>
+      <Text style={styles.text}>Steps: {count}</Text>
       <View style={styles.buttonContainer}>
-        <Button title="+" onPress={incrementCount} />
-        <Button title="-" onPress={decrementCount} />
         <Button title="clear" onPress={clearStorage} />
-        <Button title="load"  onPress={loadSteps} />
       </View>
     </View>
   );
