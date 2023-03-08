@@ -31,7 +31,6 @@ function MainScreen({ navigation }) {
   const [count, setCount] = useState(0);
   const [initalCount, setInitalCount] = useState(0);
   const [isPedometerAvailable, setIsPedometerAvailable] = useState("checking");
-  const [pastStepCount, setPastStepCount] = useState(0);
   const [currentStepCount, setCurrentStepCount] = useState(0);
   const [mDate, setMDate] = useState(new Date());
   const [days, setDays] = useState(0);
@@ -73,6 +72,7 @@ function MainScreen({ navigation }) {
       );
       if (pastStepCountResult) {
         setCount((prevCount) => prevCount + pastStepCountResult.steps);
+        setInitalCount(prevInitalCount => prevInitalCount + pastStepCountResult.steps);
         console.log(pastStepCountResult.steps);
       }
     }
