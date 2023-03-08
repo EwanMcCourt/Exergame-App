@@ -5,7 +5,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Location from "expo-location";
 export default function App() {
   const [foreground, requestForeground] = Location.useForegroundPermissions();
-  const [background, requestBackground] = Location.useBackgroundPermissions();
   const [count, setCount] = useState(0);
   const [isPedometerAvailable, setIsPedometerAvailable] = useState("checking");
   const [pastStepCount, setPastStepCount] = useState(0);
@@ -50,15 +49,8 @@ export default function App() {
   if (foreground === null || foreground.status !== "granted") {
     requestForeground();
   }
-  //need prompt to user that its gonna ask for background location permissions in settings
-  if (foreground !== null && foreground.status === "granted") {
-    if (background === null || background.status !== "granted") {
-      requestBackground();
-    }
-  }
   const checkLocationPerms = () => {
     console.log(foreground);
-    console.log(background);
   };
 
   const clearStorage = async () => {
