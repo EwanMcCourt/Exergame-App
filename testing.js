@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, Button, StyleSheet, Platform  } from 'react-native';
 import { Pedometer } from 'expo-sensors';   // https://docs.expo.dev/versions/latest/sdk/pedometer/ (requires install -npx expo install expo-sensors)
 import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function App() {
@@ -8,16 +8,22 @@ export default function App() {
   const [pastStepCount, setPastStepCount] = useState(0);
   const [currentStepCount, setCurrentStepCount] = useState(0);
   const [lastStepCount, setLastStepCount] = useState(0);
- 
+  const [lessCurrentStepCount, setLessCurrentStepCount] = useState(0);
+  
+  const prevStepCountRef = useRef(null);
+
   const subscribe = async () => {
     const isAvailable = await Pedometer.isAvailableAsync();
     setIsPedometerAvailable(String(isAvailable));
-
+  
     if (isAvailable) {
-
-
       return Pedometer.watchStepCount(result => {
-        setCurrentStepCount(result.steps);
+        console.log("live steps", result.steps)
+        const currentStepCount = result.steps;
+        const prevStepCount = prevStepCountRef.current;
+        const stepDifference = prevStepCount === null ? 0 : currentStepCount - prevStepCount;
+        setCurrentStepCount(stepDifference);
+        prevStepCountRef.current = currentStepCount;
       });
     }
   };
@@ -71,14 +77,16 @@ export default function App() {
       console.log("error: ", error.message);
     }
   };
-  const loadDate = async () => {
+  const loadOldDate = async () => {
     console.log("running load date")
     try {
       const value = await AsyncStorage.getItem('@date');
       if (value !== null) {
         const date = new Date(Date.parse(value));
         console.log(date.toLocaleTimeString())
-        await getSteps(date);
+        if (Platform.OS === 'ios') {
+          await getSteps(date);
+        }
       }
     } catch (error) {
       console.log("error: ", error.message);
@@ -94,20 +102,23 @@ export default function App() {
   };
   useEffect(() => {
     loadSteps();
-    loadDate();
+    loadOldDate();
   }, []);
   useEffect(() => {
     storeSteps();
     storeDate();
   }, [count]);
+  
   useEffect(() => {
     const subscription = subscribe();
+    return () => subscription && subscription.remove();
   }, []);
-  
+  useEffect(() => {
+    setCount(prevCount => prevCount + currentStepCount)
+  }, [currentStepCount]);
 
   
-  
-  return (
+  return(
     <View style={styles.container}>
       <Text>Steps after opening the app: {currentStepCount}</Text>
       <Text>Steps after opening the app, lagging one step behind: {lastStepCount}</Text>
