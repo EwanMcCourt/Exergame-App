@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import { View, Text, Button, StyleSheet, Platform  } from 'react-native';
 import { Pedometer } from 'expo-sensors';   // https://docs.expo.dev/versions/latest/sdk/pedometer/ (requires install -npx expo install expo-sensors)
 import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function App() {
   const [count, setCount] = useState(0);
+  const [count_no_mult, setCount_no_mult] = useState(0);
   const [initalCount, setInitalCount] = useState(0);
   const [isPedometerAvailable, setIsPedometerAvailable] = useState('checking');
   const [pastStepCount, setPastStepCount] = useState(0);
@@ -40,7 +41,8 @@ export default function App() {
     console.log("checking this time", old_date.toLocaleTimeString(), old_date.toISOString())
     if (pastStepCountResult) {
       setCount(prevCount => prevCount + pastStepCountResult.steps);
-      console.log(pastStepCountResult.steps)
+      setInitalCount(prevInitalCount => prevInitalCount + pastStepCountResult.steps);
+      console.log(pastStepCountResult.steps);
     }
     
   }
@@ -158,7 +160,7 @@ export default function App() {
   useEffect(() => {
     const subscription = subscribe();
     return () => subscription && subscription.remove();
-  }, []);
+  }, [subscription]);
   useEffect(() => {
     setCount(initalCount + currentStepCount);
   }, [currentStepCount]);
