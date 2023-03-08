@@ -1,24 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   StyleSheet,
   ImageBackground,
   View,
   Image,
   Text,
-  Button,
-  TouchableOpacity,
   TouchableHighlight,
 } from "react-native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MapView, { Circle } from "react-native-maps";
-import * as Location from "expo-location";
 
-// import { ExpoLeaflet } from 'expo-leaflet';
 
-const Stack = createStackNavigator();
 const backgroundimage = {
   uri: "https://live.staticflickr.com/4242/35699339972_4ce24484ee_b.jpg",
 };
