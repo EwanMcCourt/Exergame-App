@@ -17,7 +17,10 @@ export default function App() {
   
 
   
-  
+  const logCoords = async () => {
+        coords = (await Location.getCurrentPositionAsync()).coords;
+        console.log(coords);
+      };
 
   const subscribe = async () => {
     const isAvailable = await Pedometer.isAvailableAsync();
@@ -185,6 +188,8 @@ export default function App() {
       <Text style={styles.text}>Steps: {count}</Text>
       <View style={styles.buttonContainer}>
         <Button title="clear" onPress={clearStorage} />
+        <Button title="check permissions" onPress={checkLocationPerms} />
+        <Button title="log coords" onPress={logCoords} />
       </View>
     </View>
   );
