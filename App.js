@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Button, StyleSheet, Platform  } from 'react-native';
-import { Pedometer } from 'expo-sensors';   // https://docs.expo.dev/versions/latest/sdk/pedometer/ (requires install -npx expo install expo-sensors)
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState, useEffect, useRef } from "react";
+import { View, Text, Button, StyleSheet } from "react-native";
+import { Pedometer } from "expo-sensors"; // https://docs.expo.dev/versions/latest/sdk/pedometer/ (requires install -npx expo install expo-sensors)
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Location from "expo-location";
 export default function App() {
+  const [foreground, requestForeground] = Location.useForegroundPermissions();
   const [count, setCount] = useState(0);
   const [initalCount, setInitalCount] = useState(0);
   const [isPedometerAvailable, setIsPedometerAvailable] = useState('checking');
@@ -20,7 +22,7 @@ export default function App() {
   const subscribe = async () => {
     const isAvailable = await Pedometer.isAvailableAsync();
     setIsPedometerAvailable(String(isAvailable));
-  
+
     if (isAvailable) {
       return Pedometer.watchStepCount(result => {
         console.log("live steps", result.steps)
@@ -36,36 +38,51 @@ export default function App() {
   
     if (isAvailable){
     const end = new Date();
-    const pastStepCountResult = await Pedometer.getStepCountAsync(old_date, end);
-    console.log("checking this time", old_date.toLocaleTimeString(), old_date.toISOString())
+    const pastStepCountResult = await Pedometer.getStepCountAsync(
+      old_date,
+      end
+    );
+    console.log(
+      "checking this time",
+      old_date.toLocaleTimeString(),
+      old_date.toISOString()
+    );
     if (pastStepCountResult) {
-      setCount(prevCount => prevCount + pastStepCountResult.steps);
-      console.log(pastStepCountResult.steps)
+      setCount((prevCount) => prevCount + pastStepCountResult.steps);
+      console.log(pastStepCountResult.steps);
     }
     
   }
   };
+  if (foreground === null || foreground.status !== "granted") {
+    requestForeground();
+  }
+  const checkLocationPerms = () => {
+    console.log(foreground);
+  };
+
   const clearStorage = async () => {
     try {
       await AsyncStorage.clear();
-      console.log('AsyncStorage successfully cleared');
+      console.log("AsyncStorage successfully cleared");
     } catch (error) {
-      console.log('Error clearing AsyncStorage: ', error.message);
+      console.log("Error clearing AsyncStorage: ", error.message);
     }
   };
-  const storeSteps = async () => { 
-    console.log("running store steps")      //https://reactnative.dev/docs/asyncstorage code is from here but the package has been removed, using AsyncStorage from '@react-native-async-storage/async-storage'; works
-    try {                                //(requires install) -npm install @react-native-async-storage/async-storage
-      await AsyncStorage.setItem('@count',count.toString());
-      console.log("value set",count)
+  const storeSteps = async () => {
+    console.log("running store steps"); //https://reactnative.dev/docs/asyncstorage code is from here but the package has been removed, using AsyncStorage from '@react-native-async-storage/async-storage'; works
+    try {
+      //(requires install) -npm install @react-native-async-storage/async-storage
+      await AsyncStorage.setItem("@count", count.toString());
+      console.log("value set", count);
     } catch (error) {
       console.log("error: ", error.message);
     }
   };
   const loadSteps = async () => {
-    console.log("running load steps")
+    console.log("running load steps");
     try {
-      const value = await AsyncStorage.getItem('@count');
+      const value = await AsyncStorage.getItem("@count");
       if (value !== null) {
         setCount(parseInt(value));
         setInitalCount(parseInt(value));
@@ -76,29 +93,28 @@ export default function App() {
     }
   };
   const storeDate = async () => {
-    console.log("running store date")
+    console.log("running store date");
     try {
       const newdate = new Date();
-      await AsyncStorage.setItem('@date',newdate.toISOString())
-      console.log("added current date ", newdate.toISOString())
+      await AsyncStorage.setItem("@date", newdate.toISOString());
+      console.log("added current date ", newdate.toISOString());
     } catch (error) {
       console.log("error: ", error.message);
     }
   };
   const loadOldDate = async () => {
-    console.log("running load date")
+    console.log("running load date");
     try {
-      const value = await AsyncStorage.getItem('@date');
+      const value = await AsyncStorage.getItem("@date");
       if (value !== null) {
         const date = new Date(Date.parse(value));
-        console.log(date.toLocaleTimeString())
-        if (Platform.OS === 'ios') {
+        console.log(date.toLocaleTimeString());
+        if (Platform.OS === "ios") {
           await getSteps(date);
         }
       } 
     } catch (error) {
       console.log("error: ", error.message);
-      
     }
   };
   const getTimes = () => {
@@ -163,8 +179,7 @@ export default function App() {
     setCount(initalCount + currentStepCount);
   }, [currentStepCount]);
 
-  
-  return(
+  return (
     <View style={styles.container}>
       <Text style={styles.text}>Days: {days} Hours: {hours} Minutes: {minutes}</Text>
       <Text style={styles.text}>Steps: {count}</Text>
@@ -178,16 +193,16 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   text: {
     fontSize: 24,
     marginBottom: 20,
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
