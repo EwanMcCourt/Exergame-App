@@ -99,8 +99,8 @@ export default function App() {
       const value = await AsyncStorage.getItem("@date");
       if (value !== null) {
         const date = new Date(Date.parse(value));
-        console.log(date.toLocaleTimeString())
-        if (Platform.OS === 'ios') {
+        console.log(date.toLocaleTimeString());
+        if (Platform.OS === "ios") {
           await getSteps(date);
         }
       }
@@ -109,10 +109,10 @@ export default function App() {
     }
   };
 
-  const logCoords = async () =>{
-   coords = (await Location.getCurrentPositionAsync()).coords
-    console.log(coords)
-  }
+  const logCoords = async () => {
+    coords = (await Location.getCurrentPositionAsync()).coords;
+    console.log(coords);
+  };
   const incrementCount = () => {
     setCount(count + 1);
   };
