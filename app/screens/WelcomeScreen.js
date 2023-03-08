@@ -19,7 +19,7 @@ function WelcomeScreen({ navigation }) {
                 <Image style = {styles.logo} source = {icon}/>
                 <Text style = {styles.title}> MonsterFit </Text>
             </View>
-            <TouchableHighlight style = {styles.loginButton} underlayColor='#fb9250' onPress={() => navigation.navigate('Map')}> 
+            <TouchableHighlight style = {styles.loginButton} underlayColor='#fb9250' onPress={() => navigation.navigate('Main')}> 
                  <View >
                
                   <Text style = {styles.buttonText}>

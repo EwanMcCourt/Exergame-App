@@ -15,15 +15,16 @@ import WelcomeScreen from './app/screens/WelcomeScreen';
 import SettingsScreen from './app/screens/SettingsScreen';
 import MapScreen from './app/screens/MapScreen';
 import MonsterScreen from './app/screens/MonsterScreen';
+import MainScreen from './app/screens/MainScreen';
 import CastleScreen from './app/screens/CastleScreen';
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 
-function Map() {
+function Home() {
   return (
     <Tab.Navigator
-    initialRouteName="MapScreen"
+    initialRouteName="MainScreen"
     tabBarPosition="bottom"
     screenOptions={({ route }) => ({
       tabBarIcon: ({ focused, color, size }) => {
@@ -36,6 +37,9 @@ function Map() {
           iconName = focused ? "bug" : "bug-outline";
         } else if (rn === "Castle") {
           iconName = focused ? "shield" : "shield-outline";
+        }
+          else if (rn === "Main") {
+          iconName = focused ? "home" : "home-outline";
         }
   
         return <Ionicons name={iconName} size={25} color={color} />;
@@ -53,19 +57,24 @@ function Map() {
     })}
   >
     <Tab.Screen
+      name="Main"
+      component={MainScreen}
+      options={{ tabBarLabel: 'Home' }}
+    />
+    <Tab.Screen
       name="MapScreen"
       component={MapScreen}
       options={{ tabBarLabel: 'Map' }}
     />
     <Tab.Screen
-      name="Monster"
-      component={MonsterScreen}
-      options={{ tabBarLabel: 'Monster' }}
-    />
-    <Tab.Screen
       name="Castle"
       component={CastleScreen}
       options={{ tabBarLabel: 'Castle' }}
+    />
+    <Tab.Screen
+      name="Monster"
+      component={MonsterScreen}
+      options={{ tabBarLabel: 'Monster' }}
     />
   </Tab.Navigator>
   
@@ -81,8 +90,8 @@ export default function App() {
         }}
       >
         <Stack.Screen
-          name="Map"
-          component={Map}
+          name="Home"
+          component={Home}
           options={{ headerShown: false }}
         />
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
