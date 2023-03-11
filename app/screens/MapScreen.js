@@ -10,7 +10,9 @@ import {
 import { createStackNavigator } from "@react-navigation/stack";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MapView, { Circle } from "react-native-maps";
-
+import { useEffect, useState } from "react";
+import * as Location from "expo-location";
+import axios from 'axios';
 
 const backgroundimage = {
   uri: "https://live.staticflickr.com/4242/35699339972_4ce24484ee_b.jpg",
@@ -20,11 +22,39 @@ const icon = {
 };
 
 function MapScreen({ navigation }) {
+  const [places, setPlaces] = useState([]);
   const center = {
     latitude: 51.505,
     longitude: -0.09,
   };
   const radius = 500;
+  useEffect(() => {
+    const coords = async () => {
+      const {latitude ,longitude} = (await Location.getCurrentPositionAsync()).coords;
+      return {latitude, longitude};
+    };
+    const fetchPlaces = async () => {
+      const {latitude, longitude} = await coords();
+      console.log("trying to get places")
+      const query = `[out:json][timeout:25];(node[\"leisure\"=\"park\"](${latitude - 0.01},${longitude - 0.01},${latitude + 0.01},${longitude + 0.01});way[\"leisure\"=\"park\"](${latitude - 0.01},${longitude - 0.01},${latitude + 0.01},${longitude + 0.01});relation[\"leisure\"=\"park\"](${latitude - 0.01},${longitude - 0.01},${latitude + 0.01},${longitude + 0.01}););out body;>;out skel qt;out count 10;`
+      axios.get(`https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`)
+        .then((response) => {
+          const data = response.data.elements.map((element) => {
+            return {
+              latitude: element.lat,
+              longitude: element.lon,
+              title: element.tags ? element.tags.name || 'Unnamed park/garden' : 'Unnamed park/garden',
+            };
+          });
+          const filteredData = data.filter((element) => element.latitude !== undefined || element.longitude !== undefined);
+          const parks = filteredData.slice(0,10);
+          
+          setPlaces(parks);
+        })
+        .catch((error) => console.log(error));
+    };
+    fetchPlaces();
+  }, []);
   return (
     <ImageBackground
       source={backgroundimage}
@@ -39,13 +69,19 @@ function MapScreen({ navigation }) {
         style={styles.map}
         showsUserLocation={true}
       >
-        <Circle
-          center={center}
-          radius={radius}
-          fillColor="rgba(255, 0, 0, 0.5)"
-          strokeColor="rgba(255, 0, 0, 1)"
-          strokeWidth={2}
-        />
+        {places.map(element => (
+          <Circle
+            key={`${element.latitude},${element.longitude}`}
+            center={{
+              latitude: element.latitude,
+              longitude: element.longitude
+            }}
+            radius={radius}
+            fillColor="rgba(255, 0, 0, 0.2)" // 20% transparent
+            strokeColor="rgba(255, 0, 0, 0.5)" // 50% transparent
+            strokeWidth={2}
+          />
+  ))}
       </MapView>
       <TouchableHighlight
         style={styles.circle}
