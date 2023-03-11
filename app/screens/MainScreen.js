@@ -17,6 +17,7 @@ import * as Location from "expo-location";
 import { createStackNavigator } from "@react-navigation/stack";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useEffect, useState } from "react";
+import axios from 'axios';
 
 const Stack = createStackNavigator();
 const backgroundimage = {
@@ -31,17 +32,18 @@ function MainScreen({ navigation }) {
   const [count, setCount] = useState(0);
   const [initalCount, setInitalCount] = useState(0);
   const [count2, setCount2] = useState(0);
-  const [mult, setMult] = useState(2);
+  const [mult, setMult] = useState(1);
   const [isPedometerAvailable, setIsPedometerAvailable] = useState("checking");
   const [currentStepCount, setCurrentStepCount] = useState(0);
   const [mDate, setMDate] = useState(new Date());
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
+  const [places, setPlaces] = useState([]);
 
   const logCoords = async () => {
-    coords = (await Location.getCurrentPositionAsync()).coords;
-    console.log(coords);
+    const {latitude ,longitude} = (await Location.getCurrentPositionAsync()).coords;
+    return latitude, longitude;
   };
 
   const subscribe = async () => {
@@ -198,6 +200,34 @@ function MainScreen({ navigation }) {
     console.log("count with multiplier: ", count, " count no multiplier: ", count2);
   }, [currentStepCount]);
 
+  useEffect(() => {
+    const coords = async () => {
+      const {latitude ,longitude} = (await Location.getCurrentPositionAsync()).coords;
+      return {latitude, longitude};
+    };
+    const fetchPlaces = async () => {
+      const {latitude, longitude} = await coords();
+      console.log("trying to get places")
+      //const query = `[out:json];node(${latitude - 0.1},${longitude - 0.1},${latitude + 0.1},${longitude + 0.1});out;`
+      //const query = `[out:json];node[leisure=park|leisure=garden](${latitude - 0.05},${longitude - 0.05},${latitude + 0.05},${longitude + 0.05});out;`;
+      const query = `[out:json][timeout:25];(node[\"leisure\"=\"park\"](${latitude - 0.01},${longitude - 0.01},${latitude + 0.01},${longitude + 0.01});way[\"leisure\"=\"park\"](${latitude - 0.01},${longitude - 0.01},${latitude + 0.01},${longitude + 0.01});relation[\"leisure\"=\"park\"](${latitude - 0.01},${longitude - 0.01},${latitude + 0.01},${longitude + 0.01}););out body;>;out skel qt;out count 10;`
+      console.log(query);
+      axios.get(`https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`)
+        .then((response) => {
+          const data = response.data.elements.map((element) => {
+            console.log(element);
+            return {
+              latitude: element.lat,
+              longitude: element.lon,
+              title: element.tags ? element.tags.name || 'Unnamed park/garden' : 'Unnamed park/garden',
+            };
+          });
+  
+        })
+        .catch((error) => console.log(error));
+    };
+    fetchPlaces();
+  }, []);
   return (
     <ImageBackground
       source={backgroundimage}
