@@ -13,11 +13,9 @@ import MapView, { Circle } from "react-native-maps";
 
 
 const backgroundimage = {
-  uri: "https://live.staticflickr.com/4242/35699339972_4ce24484ee_b.jpg",
+  uri: "https://cdn.pixabay.com/photo/2016/10/22/01/54/wood-1759566_960_720.jpg",
 };
-const icon = {
-  uri: "https://cdn3.iconfinder.com/data/icons/nature-animals/512/Bird-512.png",
-};
+
 
 function MapScreen({ navigation }) {
   const center = {
@@ -31,10 +29,7 @@ function MapScreen({ navigation }) {
       fadeDuration={1000}
       style={styles.background}
     >
-      <View style={styles.titleContainer}>
-        <Image style={styles.logo} source={icon} />
-        <Text> This is the map Screen </Text>
-      </View>
+      
       <MapView
         style={styles.map}
         showsUserLocation={true}

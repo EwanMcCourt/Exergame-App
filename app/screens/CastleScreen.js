@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, StatusBar,SafeAreaView,ImageBackground, View, Image, Text, Button,TouchableOpacity, TouchableHighlight } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
-const backgroundimage = {uri: "https://live.staticflickr.com/4242/35699339972_4ce24484ee_b.jpg"};
+const backgroundimage = {uri: "https://cdn.pixabay.com/photo/2016/10/22/01/54/wood-1759566_960_720.jpg"};
 const icon = {uri:"https://cdn3.iconfinder.com/data/icons/nature-animals/512/Bird-512.png"};
 
 
@@ -14,8 +14,9 @@ function CastleScreen({navigation}) {
           
          style={styles.container}>
   <ScrollView style={styles.scrollView}>
+  
     <View style={styles.upgradeContainer1}  >
-        <TouchableHighlight style = {styles.upgradeButton}>
+        <TouchableHighlight style = {styles.upgradeButton} underlayColor='#996300' onPress={() => console.log("hi")}> 
             <View>
                 <Text>Build Castle</Text>
             </View>
@@ -25,7 +26,7 @@ function CastleScreen({navigation}) {
        
     </View>  
     <View style={styles.upgradeContainer1}  >
-        <TouchableHighlight style = {styles.upgradeButton}>
+        <TouchableHighlight style = {styles.upgradeButton}  underlayColor='#996300' onPress={() => console.log("hi")}> 
             <View>
                 <Text>Join the Fight</Text>
             </View>
@@ -49,17 +50,17 @@ function CastleScreen({navigation}) {
     </View>
     <View style={styles.upgradeContainer2}  >
         
-        <TouchableHighlight style={{ ...styles.upgradeButton, backgroundColor: 'red' }}>
+        <TouchableHighlight style={{ ...styles.upgradeButton, backgroundColor: 'red' }} underlayColor='#990000'  onPress={() => console.log("hi")}> 
             <View>
                 <Text>Level 1</Text>
             </View>
         </TouchableHighlight>
-        <TouchableHighlight style={{ ...styles.upgradeButton, backgroundColor: '#33ccff' }}>
+        <TouchableHighlight style={{ ...styles.upgradeButton, backgroundColor: '#33ccff' }} underlayColor='#0099cc' onPress={() => console.log("hi")}> 
             <View>
                 <Text>Level 1</Text>
             </View>
         </TouchableHighlight>
-        <TouchableHighlight style={{ ...styles.upgradeButton, backgroundColor: '#cc33ff' }}>
+        <TouchableHighlight style={{ ...styles.upgradeButton, backgroundColor: '#cc33ff' }} underlayColor='#9900cc'  onPress={() => console.log("hi")}> 
             <View>
                 <Text>Level 1</Text>
             </View>
@@ -67,17 +68,17 @@ function CastleScreen({navigation}) {
     </View>
     <View style={styles.upgradeContainer2}  >
         
-        <TouchableHighlight style={{ ...styles.upgradeButton, backgroundColor: 'red' }}>
+        <TouchableHighlight style={{ ...styles.upgradeButton, backgroundColor: 'red' }} underlayColor='#990000' onPress={() => console.log("hi")}> 
             <View>
                 <Text>Level 2</Text>
             </View>
         </TouchableHighlight>
-        <TouchableHighlight style={{ ...styles.upgradeButton, backgroundColor: '#33ccff' }}>
+        <TouchableHighlight style={{ ...styles.upgradeButton, backgroundColor: '#33ccff' }} underlayColor='#0099cc' onPress={() => console.log("hi")}> 
             <View>
                 <Text>Level 2</Text>
             </View>
         </TouchableHighlight>
-        <TouchableHighlight  style={{ ...styles.upgradeButton, backgroundColor: '#cc33ff' }}>
+        <TouchableHighlight  style={{ ...styles.upgradeButton, backgroundColor: '#cc33ff' }}  underlayColor='#9900cc'  onPress={() => console.log("hi")}> 
             <View>
                 <Text>Level 2</Text>
             </View>
@@ -85,18 +86,18 @@ function CastleScreen({navigation}) {
     </View>
     <View style={styles.upgradeContainer2}  >
         
-        <TouchableHighlight style={{ ...styles.upgradeButton, backgroundColor: 'red' }}>
+        <TouchableHighlight style={{ ...styles.upgradeButton, backgroundColor: 'red' }} underlayColor='#990000' onPress={() => console.log("hi")}> 
             <View>
                 <Text>Level 3</Text>
             </View>
         </TouchableHighlight>
-        <TouchableHighlight style={{ ...styles.upgradeButton, backgroundColor: '#33ccff' }}>
+        <TouchableHighlight style={{ ...styles.upgradeButton, backgroundColor: '#33ccff' }}  underlayColor='#0099cc' onPress={() => console.log("hi")}> 
             <View>
                 <Text>Level 3</Text>
             </View>
         </TouchableHighlight>
     
-        <TouchableHighlight style={{ ...styles.upgradeButton, backgroundColor: '#cc33ff' }}>
+        <TouchableHighlight style={{ ...styles.upgradeButton, backgroundColor: '#cc33ff' }} underlayColor='#9900cc'  onPress={() => console.log("hi")}> 
             <View>
                 <Text>Level 3</Text>
             </View>
@@ -104,17 +105,17 @@ function CastleScreen({navigation}) {
     </View>
     <View style={styles.upgradeContainer2}  >
         
-        <TouchableHighlight style={{ ...styles.upgradeButton, backgroundColor: 'red' }}>
+        <TouchableHighlight style={{ ...styles.upgradeButton, backgroundColor: 'red' }}  underlayColor='#990000' onPress={() => console.log("hi")}> 
             <View>
                 <Text>Level 4</Text>
             </View>
         </TouchableHighlight>
-        <TouchableHighlight style={{ ...styles.upgradeButton, backgroundColor: '#33ccff' }}>
+        <TouchableHighlight style={{ ...styles.upgradeButton, backgroundColor: '#33ccff' }} underlayColor='#0099cc' onPress={() => console.log("hi")}> 
             <View>
                 <Text>Level 4</Text>
             </View>
         </TouchableHighlight>
-        <TouchableHighlight style={{ ...styles.upgradeButton, backgroundColor: '#cc33ff' }}>
+        <TouchableHighlight style={{ ...styles.upgradeButton, backgroundColor: '#cc33ff' }} underlayColor='#9900cc' onPress={() => console.log("hi")}> 
             <View>
                 <Text>Level 4</Text>
             </View>
@@ -152,9 +153,14 @@ const styles = StyleSheet.create({
     
     margin:"5%",
 
-    backgroundColor: "#d45404",
+    backgroundColor: "orange",
     alignItems:"center",
     justifyContent: "center",
+    borderColor: 'white',
+    borderRadius: 10,
+    borderWidth: 2,
+    
+   
 },
 upgradeContainer1: {
     width: "100%",
@@ -162,7 +168,7 @@ upgradeContainer1: {
     alignItems:"center",
     justifyContent:"center",
     marginBottom:35,
-    
+   
     
   },
 

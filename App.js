@@ -45,15 +45,18 @@ function Home() {
         return <Ionicons name={iconName} size={25} color={color} />;
       },
       tabBarStyle: {
-        backgroundColor: 'white',
-      
+        backgroundColor: '#2C2C2C',
+        borderTopColor: 'orange',
+        borderTopWidth: 5,
+     
+       
       },
       tabBarLabelStyle: {
         fontSize: 12,
         fontWeight: 'bold',
       },
       tabBarInactiveTintColor: 'grey',
-      tabBarActiveTintColor: 'red',
+      tabBarActiveTintColor: 'orange',
     })}
   >
     <Tab.Screen
@@ -61,11 +64,7 @@ function Home() {
       component={MainScreen}
       options={{ tabBarLabel: 'Home' }}
     />
-    <Tab.Screen
-      name="MapScreen"
-      component={MapScreen}
-      options={{ tabBarLabel: 'Map' }}
-    />
+    
     <Tab.Screen
       name="Castle"
       component={CastleScreen}
@@ -75,6 +74,11 @@ function Home() {
       name="Monster"
       component={MonsterScreen}
       options={{ tabBarLabel: 'Monster' }}
+    />
+    <Tab.Screen
+      name="MapScreen"
+      component={MapScreen}
+      options={{ tabBarLabel: 'Map' }}
     />
   </Tab.Navigator>
   
