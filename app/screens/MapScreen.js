@@ -38,7 +38,6 @@ function MapScreen({ navigation }) {
       <MapView
         style={styles.map}
         showsUserLocation={true}
-        followsUserLocation={true}
       >
         <Circle
           center={center}
