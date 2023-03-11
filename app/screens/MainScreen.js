@@ -20,11 +20,9 @@ import { useEffect, useState } from "react";
 
 const Stack = createStackNavigator();
 const backgroundimage = {
-  uri: "https://live.staticflickr.com/4242/35699339972_4ce24484ee_b.jpg",
+  uri: "https://cdn.pixabay.com/photo/2016/10/22/01/54/wood-1759566_960_720.jpg",
 };
-const icon = {
-  uri: "https://cdn3.iconfinder.com/data/icons/nature-animals/512/Bird-512.png",
-};
+
 
 function MainScreen({ navigation }) {
   const [foreground, requestForeground] = Location.useForegroundPermissions();
@@ -205,7 +203,7 @@ function MainScreen({ navigation }) {
       style={styles.background}
     >
       <View style={styles.titleContainer}>
-        <Image style={styles.logo} source={icon} />
+        
         <View style={styles.container}>
           <Text style={styles.text}>
             Days: {days} Hours: {hours} Minutes: {minutes}
@@ -244,6 +242,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 24,
     marginBottom: 20,
+    color:"white",
   },
   buttonContainer: {
     flexDirection: "row",

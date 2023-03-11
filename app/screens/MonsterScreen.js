@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet, ImageBackground, View, Image, Text, Button,TouchableOpacity, TouchableHighlight } from 'react-native';
 
-const backgroundimage = {uri: "https://live.staticflickr.com/4242/35699339972_4ce24484ee_b.jpg"};
-const icon = {uri:"https://cdn3.iconfinder.com/data/icons/nature-animals/512/Bird-512.png"};
+const backgroundimage = {uri: "https://cdn.pixabay.com/photo/2016/10/22/01/54/wood-1759566_960_720.jpg"};
+
 
 
 function MonsterScreen({ navigation }) {
@@ -15,8 +15,8 @@ function MonsterScreen({ navigation }) {
           style = {styles.background}
           >
             <View style = {styles.titleContainer}>
-                <Image style = {styles.logo} source = {icon}/>
-                <Text> This is the monster screen </Text>
+               
+                <Text style = {styles.text}> This is the monster screen </Text>
             </View>
             
         </ImageBackground> 
@@ -40,7 +40,9 @@ const styles = StyleSheet.create({
         
         
     },
-
+    text:{
+        color:"white",
+    },
     titleContainer:{
         position: "absolute",
         top: 30,
