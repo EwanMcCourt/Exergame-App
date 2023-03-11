@@ -90,52 +90,44 @@ function MainScreen({ navigation }) {
   const clearStorage = async () => {
     try {
       await AsyncStorage.clear();
-      console.log("AsyncStorage successfully cleared");
     } catch (error) {
       console.log("Error clearing AsyncStorage: ", error.message);
     }
   };
   const storeSteps = async () => {
-    console.log("running store steps"); //https://reactnative.dev/docs/asyncstorage code is from here but the package has been removed, using AsyncStorage from '@react-native-async-storage/async-storage'; works
+     //https://reactnative.dev/docs/asyncstorage code is from here but the package has been removed, using AsyncStorage from '@react-native-async-storage/async-storage'; works
     try {
       //(requires install) -npm install @react-native-async-storage/async-storage
       await AsyncStorage.setItem("@count", count.toString());
-      console.log("value set", count);
     } catch (error) {
       console.log("error: ", error.message);
     }
   };
   const loadSteps = async () => {
-    console.log("running load steps");
     try {
       const value = await AsyncStorage.getItem("@count");
       if (value !== null) {
         setCount(parseInt(value));
         setCount2(parseInt(value));
         setInitalCount(parseInt(value));
-        console.log("value retreived at ", parseInt(value));
       }
     } catch (error) {
       console.log("error: ", error.message);
     }
   };
   const storeDate = async () => {
-    console.log("running store date");
     try {
       const newdate = new Date();
       await AsyncStorage.setItem("@date", newdate.toISOString());
-      console.log("added current date ", newdate.toISOString());
     } catch (error) {
       console.log("error: ", error.message);
     }
   };
   const loadOldDate = async () => {
-    console.log("running load date");
     try {
       const value = await AsyncStorage.getItem("@date");
       if (value !== null) {
         const date = new Date(Date.parse(value));
-        console.log(date.toLocaleTimeString());
         if (Platform.OS === "ios") {
           await getSteps(date);
         }
@@ -145,7 +137,6 @@ function MainScreen({ navigation }) {
     }
   };
   const getTimes = () => {
-    console.log("trying to set days,hours,mins", mDate.toDateString());
     const days_with_rem =
       (mDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24);
     setDays(Math.floor(days_with_rem));
@@ -155,7 +146,6 @@ function MainScreen({ navigation }) {
     setMinutes(Math.floor(mins_with_rem));
   };
   const loadMonsterDate = async () => {
-    console.log("running load date");
     try {
       const value = await AsyncStorage.getItem("@mdate");
       if (value !== null) {
@@ -190,7 +180,6 @@ function MainScreen({ navigation }) {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      console.log("checking if 0 time left");
       if (days <= 0 && hours <= 0 && minutes <= 0) {
         console.log("do the monster fight here");
       }
@@ -204,7 +193,6 @@ function MainScreen({ navigation }) {
   }, []);
   useEffect(() => {
     const value = (initalCount + currentStepCount) - count2;
-    console.log("Change in value: ", value);
     setCount2(count2 + value);
     setCount(count + Math.ceil((value * mult)));
     console.log("count with multiplier: ", count, " count no multiplier: ", count2);
