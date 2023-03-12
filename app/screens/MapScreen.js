@@ -53,7 +53,6 @@ function MapScreen({ navigation }) {
             };
           });
           const filteredData = data.filter((element) => element.latitude !== undefined)
-          //const distance = geolib.getDistance(pointA, pointB);
           
           const parks = [];
           for (let i = 0; i < filteredData.length; i++) {
@@ -62,7 +61,7 @@ function MapScreen({ navigation }) {
             for (let j = 0; j < parks.length; j++) {
               const { latitude: lat2, longitude: lon2 } = parks[j];
               let distance = getDistance({ latitude: lat1, longitude: lon1 }, { latitude: lat2, longitude: lon2 });
-              if (distance < 500) { // Change 0.5 to 0.5 km or your desired distance threshold
+              if (distance < 500) {
                 isFarEnough = false;
                 break;
               }
@@ -79,6 +78,37 @@ function MapScreen({ navigation }) {
     };
     fetchPlaces();
   }, []);
+  
+  
+  useEffect(() => {
+    const coords2 = async () => {
+      const coord = (await Location.getCurrentPositionAsync()).coords;
+      return coord;
+    };
+    const  getDist = async () => {
+      const coords = await coords2();
+      let minDis = 5000;
+      for (let i =0; i < places.length; i++){
+        const { latitude: lat1, longitude: lon1 } = places[i];
+        let distance = getDistance({ latitude: lat1, longitude: lon1 }, coords);
+        if (distance < minDis){
+          minDis = distance
+        }
+      }
+      if (minDis <= 350){
+        //set mult to 2 here
+      } else {
+        //set mult to 1 here
+      }
+      console.log(minDis)
+
+    }
+    const interval = setInterval(() => {
+      getDist();
+    }, 30000);
+    return () => clearInterval(interval);
+    
+  }, [places]);
   return (
     <ImageBackground
       source={backgroundimage}
