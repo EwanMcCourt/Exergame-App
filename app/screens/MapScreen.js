@@ -13,6 +13,7 @@ import MapView, { Circle } from "react-native-maps";
 import { useEffect, useState } from "react";
 import * as Location from "expo-location";
 import axios from 'axios';
+import { getDistance } from 'geolib';
 
 const backgroundimage = {
   uri: "https://live.staticflickr.com/4242/35699339972_4ce24484ee_b.jpg",
@@ -27,7 +28,7 @@ function MapScreen({ navigation }) {
     latitude: 51.505,
     longitude: -0.09,
   };
-  const radius = 500;
+  const radius = 350;
   useEffect(() => {
     const coords = async () => {
       const {latitude ,longitude} = (await Location.getCurrentPositionAsync()).coords;
@@ -36,19 +37,42 @@ function MapScreen({ navigation }) {
     const fetchPlaces = async () => {
       const {latitude, longitude} = await coords();
       console.log("trying to get places")
-      const query = `[out:json][timeout:25];(node[\"leisure\"=\"park\"](${latitude - 0.01},${longitude - 0.01},${latitude + 0.01},${longitude + 0.01});way[\"leisure\"=\"park\"](${latitude - 0.01},${longitude - 0.01},${latitude + 0.01},${longitude + 0.01});relation[\"leisure\"=\"park\"](${latitude - 0.01},${longitude - 0.01},${latitude + 0.01},${longitude + 0.01}););out body;>;out skel qt;out count 10;`
+      const query = `[out:json][timeout:25];(node[\"leisure\"=\"park\"][\"name\"](${latitude - 0.03},${longitude - 0.03},${latitude + 0.03},${longitude + 0.03});way[\"leisure\"=\"park\"][\"name\"](${latitude - 0.03},${longitude - 0.03},${latitude + 0.03},${longitude + 0.03});relation[\"leisure\"=\"park\"][\"name\"](${latitude - 0.03},${longitude - 0.03},${latitude + 0.03},${longitude + 0.03}););out body;>;out skel qt;out count 10;`
+      //const query = `[out:json][timeout:25];(node[\"leisure\"=\"park\"](${latitude - 0.03},${longitude - 0.03},${latitude + 0.03},${longitude + 0.03});way[\"leisure\"=\"park\"](${latitude - 0.03},${longitude - 0.03},${latitude + 0.03},${longitude + 0.03});relation[\"leisure\"=\"park\"](${latitude - 0.03},${longitude - 0.03},${latitude + 0.03},${longitude + 0.03}););out body;>;out skel qt;out count 10;`
       axios.get(`https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`)
         .then((response) => {
           const data = response.data.elements.map((element) => {
+            let title = 'empty';
+            if (element.tags && element.tags.name) {
+              title = element.tags.name;
+            }
             return {
               latitude: element.lat,
               longitude: element.lon,
-              title: element.tags ? element.tags.name || 'Unnamed park/garden' : 'Unnamed park/garden',
+              title: title,
             };
           });
-          const filteredData = data.filter((element) => element.latitude !== undefined || element.longitude !== undefined);
-          const parks = filteredData.slice(0,10);
+          const filteredData = data.filter((element) => element.latitude !== undefined)
+          //const distance = geolib.getDistance(pointA, pointB);
           
+          const parks = [];
+          for (let i = 0; i < filteredData.length; i++) {
+            let isFarEnough = true;
+            const { latitude: lat1, longitude: lon1 } = filteredData[i];
+            for (let j = 0; j < parks.length; j++) {
+              const { latitude: lat2, longitude: lon2 } = parks[j];
+              let distance = getDistance({ latitude: lat1, longitude: lon1 }, { latitude: lat2, longitude: lon2 });
+              if (distance < 500) { // Change 0.5 to 0.5 km or your desired distance threshold
+                isFarEnough = false;
+                break;
+              }
+            }
+            if (isFarEnough) {
+              parks.push(filteredData[i]);
+            } 
+          }
+          
+          //&& element.longitude !== undefined && element.title && element.title !== 'empty'
           setPlaces(parks);
         })
         .catch((error) => console.log(error));
