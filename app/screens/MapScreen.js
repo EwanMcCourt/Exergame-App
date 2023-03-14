@@ -10,10 +10,11 @@ import {
 import { createStackNavigator } from "@react-navigation/stack";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MapView, { Circle } from "react-native-maps";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext  } from "react";
 import * as Location from "expo-location";
 import axios from 'axios';
 import { getDistance } from 'geolib';
+import MultiplierContext from './MultiplierContext';
 
 const backgroundimage = {
   uri: "https://live.staticflickr.com/4242/35699339972_4ce24484ee_b.jpg",
@@ -24,6 +25,7 @@ const icon = {
 
 function MapScreen({ navigation }) {
   const [places, setPlaces] = useState([]);
+  const { multiplier, setMultiplier } = useContext(MultiplierContext);
   const center = {
     latitude: 51.505,
     longitude: -0.09,
@@ -97,8 +99,10 @@ function MapScreen({ navigation }) {
       }
       if (minDis <= 350){
         //set mult to 2 here
+        setMultiplier(2);
       } else {
         //set mult to 1 here
+        setMultiplier(1);
       }
       console.log(minDis)
 

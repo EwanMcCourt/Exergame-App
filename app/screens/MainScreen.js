@@ -16,9 +16,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Location from "expo-location";
 import { createStackNavigator } from "@react-navigation/stack";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext  } from "react";
 import axios from 'axios';
-
+import MultiplierContext from './MultiplierContext';
 const Stack = createStackNavigator();
 const backgroundimage = {
   uri: "https://live.staticflickr.com/4242/35699339972_4ce24484ee_b.jpg",
@@ -32,7 +32,7 @@ function MainScreen({ navigation }) {
   const [count, setCount] = useState(0);
   const [initalCount, setInitalCount] = useState(0);
   const [count2, setCount2] = useState(0);
-  const [mult, setMult] = useState(1);
+  const { multiplier, setMultiplier } = useContext(MultiplierContext);
   const [isPedometerAvailable, setIsPedometerAvailable] = useState("checking");
   const [currentStepCount, setCurrentStepCount] = useState(0);
   const [mDate, setMDate] = useState(new Date());
@@ -196,38 +196,10 @@ function MainScreen({ navigation }) {
   useEffect(() => {
     const value = (initalCount + currentStepCount) - count2;
     setCount2(count2 + value);
-    setCount(count + Math.ceil((value * mult)));
+    setCount(count + Math.ceil((value * multiplier)));
     console.log("count with multiplier: ", count, " count no multiplier: ", count2);
   }, [currentStepCount]);
 
-  // useEffect(() => {
-  //   const coords = async () => {
-  //     const {latitude ,longitude} = (await Location.getCurrentPositionAsync()).coords;
-  //     return {latitude, longitude};
-  //   };
-  //   const fetchPlaces = async () => {
-  //     const {latitude, longitude} = await coords();
-  //     console.log("trying to get places")
-  //     const query = `[out:json][timeout:25];(node[\"leisure\"=\"park\"](${latitude - 0.01},${longitude - 0.01},${latitude + 0.01},${longitude + 0.01});way[\"leisure\"=\"park\"](${latitude - 0.01},${longitude - 0.01},${latitude + 0.01},${longitude + 0.01});relation[\"leisure\"=\"park\"](${latitude - 0.01},${longitude - 0.01},${latitude + 0.01},${longitude + 0.01}););out body;>;out skel qt;out count 10;`
-  //     console.log(query);
-  //     axios.get(`https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`)
-  //       .then((response) => {
-  //         const data = response.data.elements.map((element) => {
-  //           return {
-  //             latitude: element.lat,
-  //             longitude: element.lon,
-  //             title: element.tags ? element.tags.name || 'Unnamed park/garden' : 'Unnamed park/garden',
-  //           };
-  //         });
-  //         const filteredData = data.filter((element) => element.latitude !== undefined || element.longitude !== undefined);
-  //         const parks = filteredData.slice(0,10);
-  //         console.log("api length", filteredData.length)
-  //         console.log(parks);
-  //       })
-  //       .catch((error) => console.log(error));
-  //   };
-  //   fetchPlaces();
-  // }, []);
   return (
     <ImageBackground
       source={backgroundimage}
@@ -241,7 +213,7 @@ function MainScreen({ navigation }) {
             Days: {days} Hours: {hours} Minutes: {minutes}
           </Text>
           <Text style={styles.text}>Steps: {count}</Text>
-          <Text style={styles.text}>Multiplier: {mult}</Text>
+          <Text style={styles.text}>Multiplier: {multiplier}</Text>
           <View style={styles.buttonContainer}>
             <Button title="clear" onPress={clearStorage} />
             <Button title="check permissions" onPress={checkLocationPerms} />
