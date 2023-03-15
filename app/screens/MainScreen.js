@@ -1,4 +1,10 @@
 import React from "react";
+import Animated, {
+  useSharedValue,
+  withTiming,
+  useAnimatedStyle,
+  Easing,
+} from "react-native-reanimated";
 import {
   StyleSheet,
   ImageBackground,
@@ -16,14 +22,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Location from "expo-location";
 import { createStackNavigator } from "@react-navigation/stack";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { useEffect, useState, useContext  } from "react";
-import axios from 'axios';
-import MultiplierContext from './MultiplierContext';
+import { useEffect, useState, useContext } from "react";
+import axios from "axios";
+import MultiplierContext from "./MultiplierContext";
 const Stack = createStackNavigator();
 const backgroundimage = {
   uri: "https://cdn.pixabay.com/photo/2016/10/22/01/54/wood-1759566_960_720.jpg",
 };
-
 
 function MainScreen({ navigation }) {
   const [foreground, requestForeground] = Location.useForegroundPermissions();
@@ -39,8 +44,22 @@ function MainScreen({ navigation }) {
   const [minutes, setMinutes] = useState(0);
   const [places, setPlaces] = useState([]);
 
+  const randomWidth = useSharedValue(10);
+
+  const config = {
+    duration: 500,
+    easing: Easing.bezier(0.5, 0.01, 0, 1),
+  };
+
+  const style = useAnimatedStyle(() => {
+    return {
+      width: withTiming(randomWidth.value, config),
+    };
+  });
+
   const logCoords = async () => {
-    const {latitude ,longitude} = (await Location.getCurrentPositionAsync()).coords;
+    const { latitude, longitude } = (await Location.getCurrentPositionAsync())
+      .coords;
     return latitude, longitude;
   };
 
@@ -74,8 +93,10 @@ function MainScreen({ navigation }) {
       );
       if (pastStepCountResult) {
         setCount((prevCount) => prevCount + pastStepCountResult.steps);
-        setInitalCount(prevInitalCount => prevInitalCount + pastStepCountResult.steps);
-        setCount2(prevSetCount2 => prevSetCount2 + pastStepCountResult.steps);
+        setInitalCount(
+          (prevInitalCount) => prevInitalCount + pastStepCountResult.steps
+        );
+        setCount2((prevSetCount2) => prevSetCount2 + pastStepCountResult.steps);
         console.log(pastStepCountResult.steps);
       }
     }
@@ -95,7 +116,7 @@ function MainScreen({ navigation }) {
     }
   };
   const storeSteps = async () => {
-     //https://reactnative.dev/docs/asyncstorage code is from here but the package has been removed, using AsyncStorage from '@react-native-async-storage/async-storage'; works
+    //https://reactnative.dev/docs/asyncstorage code is from here but the package has been removed, using AsyncStorage from '@react-native-async-storage/async-storage'; works
     try {
       //(requires install) -npm install @react-native-async-storage/async-storage
       await AsyncStorage.setItem("@count", count.toString());
@@ -192,10 +213,15 @@ function MainScreen({ navigation }) {
     return () => subscription && subscription.remove();
   }, []);
   useEffect(() => {
-    const value = (initalCount + currentStepCount) - count2;
+    const value = initalCount + currentStepCount - count2;
     setCount2(count2 + value);
-    setCount(count + Math.ceil((value * multiplier)));
-    console.log("count with multiplier: ", count, " count no multiplier: ", count2);
+    setCount(count + Math.ceil(value * multiplier));
+    console.log(
+      "count with multiplier: ",
+      count,
+      " count no multiplier: ",
+      count2
+    );
   }, [currentStepCount]);
 
   return (
@@ -205,7 +231,6 @@ function MainScreen({ navigation }) {
       style={styles.background}
     >
       <View style={styles.titleContainer}>
-        
         <View style={styles.container}>
           <Text style={styles.text}>
             Days: {days} Hours: {hours} Minutes: {minutes}
@@ -216,6 +241,32 @@ function MainScreen({ navigation }) {
             <Button title="clear" onPress={clearStorage} />
             <Button title="check permissions" onPress={checkLocationPerms} />
             <Button title="log coords" onPress={logCoords} />
+          </View>
+          <View
+            style={{
+              flex: 1,
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "column",
+            }}
+          >
+            <Animated.View
+              style={[
+                {
+                  width: 100,
+                  height: 80,
+                  backgroundColor: "black",
+                  margin: 30,
+                },
+                style,
+              ]}
+            />
+            <Button
+              title="toggle"
+              onPress={() => {
+                randomWidth.value = Math.random() * 350;
+              }}
+            />
           </View>
         </View>
       </View>
@@ -244,7 +295,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 24,
     marginBottom: 20,
-    color:"white",
+    color: "white",
   },
   buttonContainer: {
     flexDirection: "row",
