@@ -2,8 +2,8 @@ import React from 'react';
 import { StyleSheet, StatusBar,SafeAreaView,ImageBackground, View, Image, Text, Button,TouchableOpacity, TouchableHighlight } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
-const backgroundimage = {uri: "https://cdn.pixabay.com/photo/2016/10/22/01/54/wood-1759566_960_720.jpg"};
-const icon = {uri:"https://cdn3.iconfinder.com/data/icons/nature-animals/512/Bird-512.png"};
+const backgroundimage = {uri: "https://cdn.pixabay.com/photo/2016/03/06/06/42/low-poly-1239778_960_720.jpg"};
+
 
 
 

@@ -21,7 +21,7 @@ import axios from 'axios';
 import MultiplierContext from './MultiplierContext';
 const Stack = createStackNavigator();
 const backgroundimage = {
-  uri: "https://cdn.pixabay.com/photo/2016/10/22/01/54/wood-1759566_960_720.jpg",
+  uri: "https://cdn.pixabay.com/photo/2016/03/06/06/42/low-poly-1239778_960_720.jpg",
 };
 
 

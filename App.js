@@ -49,7 +49,7 @@ function Home() {
       },
       tabBarStyle: {
         backgroundColor: '#2C2C2C',
-        borderTopColor: 'orange',
+        borderTopColor: 'grey',
         borderTopWidth: 5,
      
        
@@ -59,7 +59,7 @@ function Home() {
         fontWeight: 'bold',
       },
       tabBarInactiveTintColor: 'grey',
-      tabBarActiveTintColor: 'orange',
+      tabBarActiveTintColor: 'aqua',
     })}
   >
     <Tab.Screen
