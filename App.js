@@ -17,12 +17,15 @@ import MapScreen from './app/screens/MapScreen';
 import MonsterScreen from './app/screens/MonsterScreen';
 import MainScreen from './app/screens/MainScreen';
 import CastleScreen from './app/screens/CastleScreen';
-
+import MultiplierContext from './app/screens/MultiplierContext';
+import {useState} from "react";
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 
 function Home() {
+  const [multiplier, setMultiplier] = useState(1);
   return (
+    <MultiplierContext.Provider value={{ multiplier, setMultiplier }}>
     <Tab.Navigator
     initialRouteName="MainScreen"
     tabBarPosition="bottom"
@@ -81,7 +84,7 @@ function Home() {
       options={{ tabBarLabel: 'Map' }}
     />
   </Tab.Navigator>
-  
+  </MultiplierContext.Provider>
   );
 }
 

@@ -16,8 +16,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Location from "expo-location";
 import { createStackNavigator } from "@react-navigation/stack";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { useEffect, useState } from "react";
-
+import { useEffect, useState, useContext  } from "react";
+import axios from 'axios';
+import MultiplierContext from './MultiplierContext';
 const Stack = createStackNavigator();
 const backgroundimage = {
   uri: "https://cdn.pixabay.com/photo/2016/10/22/01/54/wood-1759566_960_720.jpg",
@@ -29,17 +30,18 @@ function MainScreen({ navigation }) {
   const [count, setCount] = useState(0);
   const [initalCount, setInitalCount] = useState(0);
   const [count2, setCount2] = useState(0);
-  const [mult, setMult] = useState(2);
+  const { multiplier, setMultiplier } = useContext(MultiplierContext);
   const [isPedometerAvailable, setIsPedometerAvailable] = useState("checking");
   const [currentStepCount, setCurrentStepCount] = useState(0);
   const [mDate, setMDate] = useState(new Date());
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
+  const [places, setPlaces] = useState([]);
 
   const logCoords = async () => {
-    coords = (await Location.getCurrentPositionAsync()).coords;
-    console.log(coords);
+    const {latitude ,longitude} = (await Location.getCurrentPositionAsync()).coords;
+    return latitude, longitude;
   };
 
   const subscribe = async () => {
@@ -192,7 +194,7 @@ function MainScreen({ navigation }) {
   useEffect(() => {
     const value = (initalCount + currentStepCount) - count2;
     setCount2(count2 + value);
-    setCount(count + Math.ceil((value * mult)));
+    setCount(count + Math.ceil((value * multiplier)));
     console.log("count with multiplier: ", count, " count no multiplier: ", count2);
   }, [currentStepCount]);
 
@@ -209,7 +211,7 @@ function MainScreen({ navigation }) {
             Days: {days} Hours: {hours} Minutes: {minutes}
           </Text>
           <Text style={styles.text}>Steps: {count}</Text>
-          <Text style={styles.text}>Multiplier: {mult}</Text>
+          <Text style={styles.text}>Multiplier: {multiplier}</Text>
           <View style={styles.buttonContainer}>
             <Button title="clear" onPress={clearStorage} />
             <Button title="check permissions" onPress={checkLocationPerms} />
