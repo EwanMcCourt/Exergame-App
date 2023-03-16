@@ -228,13 +228,13 @@ function MainScreen({ navigation }) {
     );
   }, [currentStepCount]);
   useEffect(() => {
-    if (count >= recommendedSteps) {
+    if (count == recommendedSteps) {
       alert('Max value reached!');
     }
   }, [count]);
   useEffect(() => {
     const interval = setInterval(() => {
-      setCount(0); // Reset the count to 0 every 24 hours
+      setCount(0); 
     }, 24 * 60 * 60 * 1000);
 
     return () => clearInterval(interval);
