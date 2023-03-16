@@ -25,12 +25,15 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import MultiplierContext from "./MultiplierContext";
+import CircularProgress from 'react-native-circular-progress-indicator';
+
 const Stack = createStackNavigator();
 const backgroundimage = {
   uri: "https://cdn.pixabay.com/photo/2016/10/22/01/54/wood-1759566_960_720.jpg",
 };
 
 function MainScreen({ navigation }) {
+  
   const [foreground, requestForeground] = Location.useForegroundPermissions();
   const [count, setCount] = useState(0);
   const [initalCount, setInitalCount] = useState(0);
@@ -46,6 +49,7 @@ function MainScreen({ navigation }) {
 
   const randomWidth = useSharedValue(10);
 
+  const recommendedSteps = 4000;
   const config = {
     duration: 500,
     easing: Easing.bezier(0.5, 0.01, 0, 1),
@@ -198,7 +202,7 @@ function MainScreen({ navigation }) {
     }, 30000);
     return () => clearInterval(interval);
   }, [mDate]);
-
+  
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (days <= 0 && hours <= 0 && minutes <= 0) {
@@ -223,6 +227,18 @@ function MainScreen({ navigation }) {
       count2
     );
   }, [currentStepCount]);
+  useEffect(() => {
+    if (count >= recommendedSteps) {
+      alert('Max value reached!');
+    }
+  }, [count]);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCount(0); // Reset the count to 0 every 24 hours
+    }, 24 * 60 * 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <ImageBackground
@@ -267,9 +283,30 @@ function MainScreen({ navigation }) {
                 randomWidth.value = Math.random() * 350;
               }}
             />
+               <CircularProgress
+                  value={count}
+                  radius={120}
+                  duration={2000}
+                  progressValueColor={'white'}
+                  maxValue={recommendedSteps}
+                  title= "Steps"
+                  titleColor={'white'}
+                  titleStyle={{fontWeight: 'bold'}}
+                  activeStrokeColor={'aqua'}
+                  activeStrokeSecondaryColor={'grey'}
+                  inActiveStrokeColor={'#9b59b6'}
+                  inActiveStrokeOpacity={0.5}
+                  inActiveStrokeWidth={40}
+                  activeStrokeWidth={20}
+                
+  
+  
+      />
+
           </View>
         </View>
       </View>
+  
       <TouchableHighlight
         style={styles.circle}
         underlayColor="lightgrey"

@@ -15,24 +15,7 @@ function CastleScreen({navigation}) {
          style={styles.container}>
   <ScrollView style={styles.scrollView}>
   
-    <View style={styles.upgradeContainer1}  >
-        <TouchableHighlight style = {styles.upgradeButton} underlayColor='#996300' onPress={() => console.log("hi")}> 
-            <View>
-                <Text>Build Castle</Text>
-            </View>
-        </TouchableHighlight>
-        
-        
-       
-    </View>  
-    <View style={styles.upgradeContainer1}  >
-        <TouchableHighlight style = {styles.upgradeButton}  underlayColor='#996300' onPress={() => console.log("hi")}> 
-            <View>
-                <Text>Join the Fight</Text>
-            </View>
-        </TouchableHighlight>
-       
-    </View>
+    
     <View style={styles.upgradeContainer2}  >
         
         
