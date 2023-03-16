@@ -1,4 +1,3 @@
-
 import React from "react";
 import {
   StyleSheet,
@@ -13,9 +12,9 @@ import {
   TouchableHighlight,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import * as Progress from 'react-native-progress';
+import * as Progress from "react-native-progress";
 import UpgradeList from "./UpgradeList";
-
+import ProgressBar from "./ProgressBar"
 
 const backgroundimage = {
   uri: "https://cdn.pixabay.com/photo/2016/10/22/01/54/wood-1759566_960_720.jpg",
@@ -23,7 +22,6 @@ const backgroundimage = {
 const icon = {
   uri: "https://cdn3.iconfinder.com/data/icons/nature-animals/512/Bird-512.png",
 };
-
 
 function CastleScreen({ navigation }) {
   return (
@@ -33,27 +31,9 @@ function CastleScreen({ navigation }) {
       style={styles.container}
     >
       <ScrollView style={styles.scrollView}>
-      <Progress.Bar
-  progress={0.3}
-  width={200}
-  color="red"
-  height={20}
-  borderRadius={10}
-/>
-<Progress.Bar
-  progress={0.6}
-  width={200}
-  color="#33ccff"
-  height={20}
-  borderRadius={10}
-/>
-<Progress.Bar
-  progress={0.9}
-  width={200}
-  color="#cc33ff"
-  height={20}
-  borderRadius={10}
-/>
+        <ProgressBar spec = "health"/>
+        <ProgressBar spec = "attack"/>
+        <ProgressBar spec = "defence"/>
         <View style={styles.upgradeContainer1}>
           <TouchableHighlight
             style={styles.upgradeButton}
