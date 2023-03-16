@@ -23,7 +23,7 @@ function UpgradeButton({ message, spec }) {
     <TouchableHighlight
       style={{ ...styles.upgradeButton, backgroundColor: colourScheme[spec][0] }}
       underlayColor={colourScheme[spec][1]}
-      onPress={() => console.log({ message, spec })}
+      onPress = { () => {upgrade(message, spec)}}
     >
       <View>
         <Text>{message}</Text>
@@ -31,6 +31,13 @@ function UpgradeButton({ message, spec }) {
     </TouchableHighlight>
   );
 }
+function upgrade(message, spec){
+    console.log(spec + " is " + message)
+}
+
+
+
+
 export default UpgradeButton;
 
 const styles = StyleSheet.create({
