@@ -12,7 +12,6 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 
 //Screens
 import WelcomeScreen from './app/screens/WelcomeScreen';
-import SettingsScreen from './app/screens/SettingsScreen';
 import MapScreen from './app/screens/MapScreen';
 import MonsterScreen from './app/screens/MonsterScreen';
 import MainScreen from './app/screens/MainScreen';
