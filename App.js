@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 
 
@@ -19,10 +19,30 @@ import MainScreen from './app/screens/MainScreen';
 import CastleScreen from './app/screens/CastleScreen';
 import MultiplierContext from './app/screens/MultiplierContext';
 import {useState} from "react";
+import { useRoute } from '@react-navigation/native';
+
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
 
-function Home() {
+
+function DrawerNav({ navigation }) {
+  const route = useRoute();
+  return (
+
+
+    
+  <Drawer.Navigator>
+    
+    <Drawer.Screen name="Home" component={Home} options={{ headerShown: false }} />
+    <Drawer.Screen name="Logout" component={WelcomeScreen}  options={{ headerShown: false,swipeEnabled: false }}/>
+  </Drawer.Navigator>
+   
+  );
+}
+
+
+function Home({ navigation }) {
   const [multiplier, setMultiplier] = useState(1);
   return (
     <MultiplierContext.Provider value={{ multiplier, setMultiplier }}>
@@ -90,19 +110,22 @@ function Home() {
 
 export default function App() {
   return (
+   
     <NavigationContainer>
+       
       <Stack.Navigator
         screenOptions={{
           headerShown: false
         }}
       >
+      
         <Stack.Screen
-          name="Home"
-          component={Home}
+          name="DrawerNav"
+          component={DrawerNav}
           options={{ headerShown: false }}
         />
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
-        <Stack.Screen name="Settings" component={SettingsScreen} />
+       
       </Stack.Navigator> 
     </NavigationContainer>
    

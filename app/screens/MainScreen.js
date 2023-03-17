@@ -246,6 +246,9 @@ function MainScreen({ navigation }) {
       fadeDuration={1000}
       style={styles.background}
     >
+    
+     
+  
       <View style={styles.titleContainer}>
         <View style={styles.container}>
           <Text style={styles.text}>
