@@ -17,7 +17,7 @@ import UpgradeList from "./UpgradeList";
 
 
 const backgroundimage = {
-  uri: "https://cdn.pixabay.com/photo/2016/10/22/01/54/wood-1759566_960_720.jpg",
+  uri: "https://cdn.pixabay.com/photo/2016/03/06/06/42/low-poly-1239778_960_720.jpg",
 };
 
 
@@ -51,28 +51,7 @@ function CastleScreen({ navigation }) {
   height={20}
   borderRadius={10}
 />
-        <View style={styles.upgradeContainer1}>
-          <TouchableHighlight
-            style={styles.upgradeButton}
-            underlayColor="#996300"
-            onPress={() => console.log("hi")}
-          >
-            <View>
-              <Text>Build Castle</Text>
-            </View>
-          </TouchableHighlight>
-        </View>
-        <View style={styles.upgradeContainer1}>
-          <TouchableHighlight
-            style={styles.upgradeButton}
-            underlayColor="#996300"
-            onPress={() => console.log("hi")}
-          >
-            <View>
-              <Text>Join the Fight</Text>
-            </View>
-          </TouchableHighlight>
-        </View>
+        
         <View style={styles.upgradeContainer2}>
           <View style={styles.headers}>
             <Text style={styles.text}>Health</Text>
@@ -105,6 +84,11 @@ const styles = StyleSheet.create({
   headers: {
     width: 75,
     height: 75,
+
+    
+   
+    borderBottomWidth: 1.5,
+    borderBottomColor: 'white',
 
     marginLeft: "5%",
     marginRight: "5%",
@@ -145,10 +129,11 @@ const styles = StyleSheet.create({
 
   scrollView: {},
   text: {
-    fontSize: 15,
+    fontSize: 18,
     fontWeight: "bold",
     color: "white",
     borderBottomColor: "white",
+ 
   },
 });
 export default CastleScreen;
