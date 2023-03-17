@@ -136,18 +136,7 @@ function MapScreen({ navigation }) {
           />
   ))}
       </MapView>
-      <TouchableHighlight
-        style={styles.circle}
-        underlayColor="lightgrey"
-        onPress={() => navigation.navigate("Settings")}
-      >
-        <Ionicons
-          style={styles.cogs}
-          name={"settings-outline"}
-          size={25}
-          color={"grey"}
-        />
-      </TouchableHighlight>
+      
     </ImageBackground>
   );
 }
@@ -159,26 +148,12 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "center",
   },
-  circle: {
-    width: 65,
-    height: 65,
-    borderRadius: 100 / 2,
-    backgroundColor: "white",
-    position: "absolute",
-    top: 30,
-    right: 30,
-  },
+ 
   map: {
     width: "100%",
     height: "100%",
   },
-  cogs: {
-    position: "absolute",
-    left: 20,
-    right: 0,
-    top: 20,
-    bottom: 0,
-  },
+ 
   logo: {
     width: 100,
     height: 100,
