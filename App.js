@@ -31,10 +31,39 @@ function DrawerNav({ navigation }) {
 
 
     
-  <Drawer.Navigator>
+    <Drawer.Navigator  screenOptions={{
+      drawerStyle: {
+        backgroundColor: '#2C2C2C',
+        borderRightColor: 'grey',
+        borderRightWidth: 5,
+      
+        activeBackgroundColor: "red",
+      },
+   
+    }}>
     
-    <Drawer.Screen name="Home" component={Home} options={{ headerShown: false }} />
-    <Drawer.Screen name="Logout" component={WelcomeScreen}  options={{ headerShown: false,swipeEnabled: false }}/>
+    <Drawer.Screen name="Home" component={Home} options={{
+    headerShown: false,
+    drawerLabel: "Home",
+    drawerIcon: ({ focused, color, size }) => (
+      <Ionicons name="home" size={size} color={"aqua"} />
+    ),
+    drawerLabelStyle: {
+      fontSize: 16,
+      fontWeight: "bold",
+      color: "white",
+    },
+  }}
+/>
+    <Drawer.Screen name="Logout" component={WelcomeScreen}  options={{ headerShown: false,swipeEnabled: false,drawerLabel: "Logout",
+    drawerIcon: ({ focused, color, size }) => (
+      <Ionicons name="log-out" size={size} color={"red"} />
+    ),
+    drawerLabelStyle: {
+      fontSize: 16,
+      fontWeight: "bold",
+      color: "white",
+    }, }}/>
   </Drawer.Navigator>
    
   );
