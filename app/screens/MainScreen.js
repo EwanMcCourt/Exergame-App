@@ -225,7 +225,9 @@ function MainScreen({ navigation }) {
     return () => clearInterval(interval);
   }, [mDate]);
   useEffect(() => {
-    getDaily();
+    if (Platform.OS === "ios"){
+      getDaily();
+    }
   }, [count]);
   
   useEffect(() => {
