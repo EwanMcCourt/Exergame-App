@@ -2,13 +2,15 @@ import { StyleSheet, StatusBar,SafeAreaView,ImageBackground, View, Image, Text, 
 import UpgradeButton from './UpgradeButton';
 
 
-function UpgradeList({spec}) {
+function UpgradeList({spec, upgradeFunc}) {
     const levels = 4
+    const steps = 1/(levels + 1)
 
     return( <View>
         {[...Array(levels).keys()].map(key => 
-        { return(
-                <UpgradeButton message = {"Level " + (key+1)} spec = { spec }></UpgradeButton>)
+        {   console.log("key" + key)
+            return(
+                <UpgradeButton message = {"Level " + (key+1)} spec = { spec } step = {steps} upgradeFunction = {upgradeFunc}></UpgradeButton>)
 
             })}
    </View>

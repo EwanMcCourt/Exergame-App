@@ -1,3 +1,5 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect } from "react";
 import {
   StyleSheet,
   StatusBar,
@@ -11,19 +13,24 @@ import {
   TouchableHighlight,
 } from "react-native";
 
-function UpgradeButton({ message, spec }) {
-
-    let colourScheme ={
-        "attack": ["#33ccff","#0099cc"],
-        "health": ["red","#990000"],
-        "defence": ["#cc33ff","#9900cc"]
-    }
+function UpgradeButton({ message, spec, step, upgradeFunction }) {
+  let colourScheme = {
+    attack: ["#33ccff", "#0099cc"],
+    health: ["red", "#990000"],
+    defence: ["#cc33ff", "#9900cc"],
+  };
 
   return (
     <TouchableHighlight
-      style={{ ...styles.upgradeButton, backgroundColor: colourScheme[spec][0] }}
+      style={{
+        ...styles.upgradeButton,
+        backgroundColor: colourScheme[spec][0],
+      }}
       underlayColor={colourScheme[spec][1]}
-      onPress = { () => {upgrade(message, spec)}}
+      onPress={async() => {
+        await upgrade(spec, step);
+        upgradeFunction()
+      }}
     >
       <View>
         <Text>{message}</Text>
@@ -31,12 +38,20 @@ function UpgradeButton({ message, spec }) {
     </TouchableHighlight>
   );
 }
-function upgrade(message, spec){
-    console.log(spec + " is " + message)
+async function upgrade(spec, step) {
+  await upgradeAtr(spec, step);
 }
 
 
-
+const upgradeAtr = async (spec, step) => {
+  try {
+    let newVal =
+      parseFloat(await AsyncStorage.getItem(`${spec}Progress`)) + step;
+    await AsyncStorage.setItem(`${spec}Progress`, String(newVal));
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export default UpgradeButton;
 
