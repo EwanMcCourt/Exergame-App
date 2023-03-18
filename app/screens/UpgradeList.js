@@ -8,7 +8,7 @@ function UpgradeList({spec}) {
     return( <View>
         {[...Array(levels).keys()].map(key => 
         { return(
-                <UpgradeButton message = {"Level " + (key+1)} spec = { spec }></UpgradeButton>)
+                <UpgradeButton key = {key} message = {"Level " + (key+1)} spec = { spec }></UpgradeButton>)
 
             })}
    </View>

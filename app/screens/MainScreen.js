@@ -46,6 +46,7 @@ function MainScreen({ navigation }) {
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [places, setPlaces] = useState([]);
+  const [dailySteps, setDailySteps] = useState([]);
 
   const randomWidth = useSharedValue(10);
 
@@ -73,7 +74,6 @@ function MainScreen({ navigation }) {
 
     if (isAvailable) {
       return Pedometer.watchStepCount((result) => {
-        console.log("live steps", result.steps);
         setCurrentStepCount(result.steps);
       });
     } else {
@@ -90,18 +90,12 @@ function MainScreen({ navigation }) {
         old_date,
         end
       );
-      console.log(
-        "checking this time",
-        old_date.toLocaleTimeString(),
-        old_date.toISOString()
-      );
       if (pastStepCountResult) {
         setCount((prevCount) => prevCount + pastStepCountResult.steps);
         setInitalCount(
           (prevInitalCount) => prevInitalCount + pastStepCountResult.steps
         );
         setCount2((prevSetCount2) => prevSetCount2 + pastStepCountResult.steps);
-        console.log(pastStepCountResult.steps);
       }
     }
   };
@@ -162,14 +156,42 @@ function MainScreen({ navigation }) {
     }
   };
   const getTimes = () => {
-    const days_with_rem =
-      (mDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24);
-    setDays(Math.floor(days_with_rem));
-    const hours_with_rem = (days_with_rem - Math.floor(days_with_rem)) * 24;
-    setHours(Math.floor(hours_with_rem));
-    const mins_with_rem = (hours_with_rem - Math.floor(hours_with_rem)) * 60;
-    setMinutes(Math.floor(mins_with_rem));
+    const seconds = (mDate.getTime() - new Date().getTime());
+    if (seconds < 1){
+      setDays(0);
+      setHours(0);
+      setMinutes(0);
+    } else {
+      const days_with_rem =
+        (mDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24);
+      setDays(Math.floor(days_with_rem));
+      const hours_with_rem = (days_with_rem - Math.floor(days_with_rem)) * 24;
+      setHours(Math.floor(hours_with_rem));
+      const mins_with_rem = (hours_with_rem - Math.floor(hours_with_rem)) * 60;
+      setMinutes(Math.floor(mins_with_rem));
+  }
+
   };
+  const getDaily = async () => {
+    const isAvailable = await Pedometer.isAvailableAsync();
+    setIsPedometerAvailable(String(isAvailable));
+
+    if (isAvailable) {
+      const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        console.log(today);
+      const now = new Date();
+      const pastStepCountResult = await Pedometer.getStepCountAsync(
+        today,
+        now
+      );
+      if (pastStepCountResult) {
+        setDailySteps(pastStepCountResult.steps);
+      }
+    }
+  };
+  
   const loadMonsterDate = async () => {
     try {
       const value = await AsyncStorage.getItem("@mdate");
@@ -199,16 +221,26 @@ function MainScreen({ navigation }) {
     getTimes();
     const interval = setInterval(() => {
       getTimes();
-    }, 30000);
+    }, 60000);
     return () => clearInterval(interval);
   }, [mDate]);
+  useEffect(() => {
+    getDaily();
+  }, [count]);
   
   useEffect(() => {
-    const timeout = setTimeout(() => {
+    const setDate = async () => {
+      const mdate = new Date();
+      mdate.setDate(mdate.getDate() + 7);
+      await AsyncStorage.setItem("@mdate", mdate.toISOString());
+      setMDate(mdate);
+    }
+    const timeout = setInterval(() => {
       if (days <= 0 && hours <= 0 && minutes <= 0) {
         console.log("do the monster fight here");
+        setDate();
       }
-    }, 3000);
+    }, 60000);
     return () => clearInterval(timeout);
   }, [minutes]);
 
@@ -220,25 +252,19 @@ function MainScreen({ navigation }) {
     const value = initalCount + currentStepCount - count2;
     setCount2(count2 + value);
     setCount(count + Math.ceil(value * multiplier));
-    console.log(
-      "count with multiplier: ",
-      count,
-      " count no multiplier: ",
-      count2
-    );
   }, [currentStepCount]);
-  useEffect(() => {
-    if (count == recommendedSteps) {
-      alert('Max value reached!');
-    }
-  }, [count]);
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCount(0); 
-    }, 24 * 60 * 60 * 1000);
+  // useEffect(() => {
+  //   if (count == recommendedSteps) {
+  //     alert('Max value reached!');
+  //   }
+  // }, [count]);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setCount(0); 
+  //   }, 24 * 60 * 60 * 1000);
 
-    return () => clearInterval(interval);
-  }, []);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   return (
     <ImageBackground
@@ -254,7 +280,7 @@ function MainScreen({ navigation }) {
           <Text style={styles.text}>
             Days: {days} Hours: {hours} Minutes: {minutes}
           </Text>
-          <Text style={styles.text}>Steps: {count}</Text>
+          <Text style={styles.text}>Points: {count}</Text>
           <Text style={styles.text}>Multiplier: {multiplier}</Text>
           <View style={styles.buttonContainer}>
             <Button title="clear" onPress={clearStorage} />
@@ -287,7 +313,7 @@ function MainScreen({ navigation }) {
               }}
             />
                <CircularProgress
-                  value={count}
+                  value={dailySteps}
                   radius={120}
                   duration={2000}
                   progressValueColor={'white'}
