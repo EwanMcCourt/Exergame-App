@@ -295,25 +295,10 @@ function MainScreen({ navigation }) {
               alignItems: "center",
               justifyContent: "center",
               flexDirection: "column",
+              
             }}
           >
-            <Animated.View
-              style={[
-                {
-                  width: 100,
-                  height: 80,
-                  backgroundColor: "black",
-                  margin: 30,
-                },
-                style,
-              ]}
-            />
-            <Button
-              title="toggle"
-              onPress={() => {
-                randomWidth.value = Math.random() * 350;
-              }}
-            />
+            
                <CircularProgress
                   value={dailySteps}
                   radius={120}
@@ -324,7 +309,7 @@ function MainScreen({ navigation }) {
                   titleColor={'white'}
                   titleStyle={{fontWeight: 'bold'}}
                   activeStrokeColor={'aqua'}
-                  activeStrokeSecondaryColor={'grey'}
+                  activeStrokeSecondaryColor={'lime'}
                   inActiveStrokeColor={'#9b59b6'}
                   inActiveStrokeOpacity={0.5}
                   inActiveStrokeWidth={40}
@@ -350,7 +335,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   text: {
-    fontSize: 24,
+    fontSize: 28,
     marginBottom: 20,
     color: "white",
   },
@@ -376,8 +361,10 @@ const styles = StyleSheet.create({
   },
 
   titleContainer: {
-    position: "absolute",
-    top: 30,
+    marginTop: "35%",
+    
+    alignItems: "center",
+    justifyContent: "flex-end",
   },
 });
 export default MainScreen;
