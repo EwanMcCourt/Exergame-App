@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, ImageBackground, View, Image, Text, Button,TouchableOpacity, TouchableHighlight } from 'react-native';
 
 
-const backgroundimage = {uri: "https://w0.peakpx.com/wallpaper/287/911/HD-wallpaper-trex-dinosaur-trex-tyrannosaurus.jpg"};
+const backgroundimage = {uri: "https://c4.wallpaperflare.com/wallpaper/97/833/155/mountains-firewatch-green-forest-wallpaper-preview.jpg"};
 const icon = {uri:"http://clipart-library.com/images/6cr54jKgi.gif"};
 
 function WelcomeScreen({ navigation }) {
@@ -19,7 +19,7 @@ function WelcomeScreen({ navigation }) {
                 <Image style = {styles.logo} source = {icon}/>
                 <Text style = {styles.title}> MonsterFit </Text>
             </View>
-            <TouchableHighlight style = {styles.loginButton} underlayColor='#fb9250' onPress={() => navigation.navigate('Main')}> 
+            <TouchableHighlight style = {styles.loginButton} underlayColor='#006666' onPress={() => navigation.navigate('Main')}> 
                  <View >
                
                   <Text style = {styles.buttonText}>
@@ -29,7 +29,7 @@ function WelcomeScreen({ navigation }) {
                  </View>
             </TouchableHighlight >
             
-            <TouchableHighlight style = {styles.registerButton}underlayColor="#800000" onPress={() => console.log("hi")}> 
+            <TouchableHighlight style = {styles.registerButton}underlayColor="#206020" onPress={() => console.log("hi")}> 
                  <View >
                
                   <Text style = {styles.buttonText}>
@@ -53,18 +53,26 @@ const styles = StyleSheet.create({
     },
     buttonText:{
         color: "white",
+        fontWeight: "bold",
         fontSize: 30,
   
      
         
     },
     loginButton:{
-        width:"100%",
-        height: 70,
-        
-        backgroundColor: "#d45404",
-        alignItems:"center",
-        justifyContent: "center",
+        width: "85%",
+  height: 70,
+  backgroundColor: "#00b3b3",
+  borderTopLeftRadius: 10,
+  borderTopRightRadius: 10,
+  borderTopColor: '#0d260d',
+ 
+  borderTopWidth: 5,
+ 
+  alignItems: "center",
+  justifyContent: "center",
+  
+  
     },
     logo:{
         width:100,
@@ -73,17 +81,23 @@ const styles = StyleSheet.create({
         
     },
     registerButton:{
-        width:"100%",
+        width:"95%",
         height: 70,
-        backgroundColor: "#330000",
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+        borderTopColor: '#0d260d',
+       
+        borderTopWidth: 5,
+        
+        
+        backgroundColor: "#339933",
         alignItems:"center",
         justifyContent: "center",
     },
-    title:{
-        fontWeight:"bold",
-        color:"white",
-        fontSize:35,
-       
+    title: {
+        fontWeight: "bold",
+        color: "black",
+        fontSize: 35,
     },
     titleContainer:{
         position: "absolute",

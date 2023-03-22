@@ -19,11 +19,10 @@ import ProgressBar from "./ProgressBar";
 import { useEffect, useState } from "react";
 
 const backgroundimage = {
-  uri: "https://cdn.pixabay.com/photo/2016/10/22/01/54/wood-1759566_960_720.jpg",
+  uri: "https://cdn.pixabay.com/photo/2016/03/06/06/42/low-poly-1239778_960_720.jpg",
 };
-const icon = {
-  uri: "https://cdn3.iconfinder.com/data/icons/nature-animals/512/Bird-512.png",
-};
+
+
 
 function CastleScreen({ navigation }) {
   // const clearStorage = async ()=>{
@@ -145,6 +144,11 @@ const styles = StyleSheet.create({
     width: 75,
     height: 75,
 
+    
+   
+    borderBottomWidth: 1.5,
+    borderBottomColor: 'white',
+
     marginLeft: "5%",
     marginRight: "5%",
 
@@ -184,10 +188,11 @@ const styles = StyleSheet.create({
 
   scrollView: {},
   text: {
-    fontSize: 15,
+    fontSize: 18,
     fontWeight: "bold",
     color: "white",
     borderBottomColor: "white",
+ 
   },
 });
 export default CastleScreen;
