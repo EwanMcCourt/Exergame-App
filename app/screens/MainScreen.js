@@ -29,7 +29,7 @@ import CircularProgress from 'react-native-circular-progress-indicator';
 
 const Stack = createStackNavigator();
 const backgroundimage = {
-  uri: "https://cdn.pixabay.com/photo/2016/10/22/01/54/wood-1759566_960_720.jpg",
+  uri: "https://cdn.pixabay.com/photo/2016/03/06/06/42/low-poly-1239778_960_720.jpg",
 };
 
 function MainScreen({ navigation }) {
@@ -46,6 +46,7 @@ function MainScreen({ navigation }) {
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [places, setPlaces] = useState([]);
+  const [dailySteps, setDailySteps] = useState([]);
 
   const randomWidth = useSharedValue(10);
 
@@ -73,7 +74,6 @@ function MainScreen({ navigation }) {
 
     if (isAvailable) {
       return Pedometer.watchStepCount((result) => {
-        console.log("live steps", result.steps);
         setCurrentStepCount(result.steps);
       });
     } else {
@@ -90,18 +90,12 @@ function MainScreen({ navigation }) {
         old_date,
         end
       );
-      console.log(
-        "checking this time",
-        old_date.toLocaleTimeString(),
-        old_date.toISOString()
-      );
       if (pastStepCountResult) {
         setCount((prevCount) => prevCount + pastStepCountResult.steps);
         setInitalCount(
           (prevInitalCount) => prevInitalCount + pastStepCountResult.steps
         );
         setCount2((prevSetCount2) => prevSetCount2 + pastStepCountResult.steps);
-        console.log(pastStepCountResult.steps);
       }
     }
   };
@@ -162,14 +156,42 @@ function MainScreen({ navigation }) {
     }
   };
   const getTimes = () => {
-    const days_with_rem =
-      (mDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24);
-    setDays(Math.floor(days_with_rem));
-    const hours_with_rem = (days_with_rem - Math.floor(days_with_rem)) * 24;
-    setHours(Math.floor(hours_with_rem));
-    const mins_with_rem = (hours_with_rem - Math.floor(hours_with_rem)) * 60;
-    setMinutes(Math.floor(mins_with_rem));
+    const seconds = (mDate.getTime() - new Date().getTime());
+    if (seconds < 1){
+      setDays(0);
+      setHours(0);
+      setMinutes(0);
+    } else {
+      const days_with_rem =
+        (mDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24);
+      setDays(Math.floor(days_with_rem));
+      const hours_with_rem = (days_with_rem - Math.floor(days_with_rem)) * 24;
+      setHours(Math.floor(hours_with_rem));
+      const mins_with_rem = (hours_with_rem - Math.floor(hours_with_rem)) * 60;
+      setMinutes(Math.floor(mins_with_rem));
+  }
+
   };
+  const getDaily = async () => {
+    const isAvailable = await Pedometer.isAvailableAsync();
+    setIsPedometerAvailable(String(isAvailable));
+
+    if (isAvailable) {
+      const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        console.log(today);
+      const now = new Date();
+      const pastStepCountResult = await Pedometer.getStepCountAsync(
+        today,
+        now
+      );
+      if (pastStepCountResult) {
+        setDailySteps(pastStepCountResult.steps);
+      }
+    }
+  };
+  
   const loadMonsterDate = async () => {
     try {
       const value = await AsyncStorage.getItem("@mdate");
@@ -199,16 +221,28 @@ function MainScreen({ navigation }) {
     getTimes();
     const interval = setInterval(() => {
       getTimes();
-    }, 30000);
+    }, 60000);
     return () => clearInterval(interval);
   }, [mDate]);
+  useEffect(() => {
+    if (Platform.OS === "ios"){
+      getDaily();
+    }
+  }, [count]);
   
   useEffect(() => {
-    const timeout = setTimeout(() => {
+    const setDate = async () => {
+      const mdate = new Date();
+      mdate.setDate(mdate.getDate() + 7);
+      await AsyncStorage.setItem("@mdate", mdate.toISOString());
+      setMDate(mdate);
+    }
+    const timeout = setInterval(() => {
       if (days <= 0 && hours <= 0 && minutes <= 0) {
         console.log("do the monster fight here");
+        setDate();
       }
-    }, 3000);
+    }, 60000);
     return () => clearInterval(timeout);
   }, [minutes]);
 
@@ -220,25 +254,19 @@ function MainScreen({ navigation }) {
     const value = initalCount + currentStepCount - count2;
     setCount2(count2 + value);
     setCount(count + Math.ceil(value * multiplier));
-    console.log(
-      "count with multiplier: ",
-      count,
-      " count no multiplier: ",
-      count2
-    );
   }, [currentStepCount]);
-  useEffect(() => {
-    if (count == recommendedSteps) {
-      alert('Max value reached!');
-    }
-  }, [count]);
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCount(0); 
-    }, 24 * 60 * 60 * 1000);
+  // useEffect(() => {
+  //   if (count == recommendedSteps) {
+  //     alert('Max value reached!');
+  //   }
+  // }, [count]);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setCount(0); 
+  //   }, 24 * 60 * 60 * 1000);
 
-    return () => clearInterval(interval);
-  }, []);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   return (
     <ImageBackground
@@ -246,12 +274,15 @@ function MainScreen({ navigation }) {
       fadeDuration={1000}
       style={styles.background}
     >
+    
+     
+  
       <View style={styles.titleContainer}>
         <View style={styles.container}>
           <Text style={styles.text}>
             Days: {days} Hours: {hours} Minutes: {minutes}
           </Text>
-          <Text style={styles.text}>Steps: {count}</Text>
+          <Text style={styles.text}>Points: {count}</Text>
           <Text style={styles.text}>Multiplier: {multiplier}</Text>
           <View style={styles.buttonContainer}>
             <Button title="clear" onPress={clearStorage} />
@@ -264,27 +295,12 @@ function MainScreen({ navigation }) {
               alignItems: "center",
               justifyContent: "center",
               flexDirection: "column",
+              
             }}
           >
-            <Animated.View
-              style={[
-                {
-                  width: 100,
-                  height: 80,
-                  backgroundColor: "black",
-                  margin: 30,
-                },
-                style,
-              ]}
-            />
-            <Button
-              title="toggle"
-              onPress={() => {
-                randomWidth.value = Math.random() * 350;
-              }}
-            />
+            
                <CircularProgress
-                  value={count}
+                  value={dailySteps}
                   radius={120}
                   duration={2000}
                   progressValueColor={'white'}
@@ -293,7 +309,7 @@ function MainScreen({ navigation }) {
                   titleColor={'white'}
                   titleStyle={{fontWeight: 'bold'}}
                   activeStrokeColor={'aqua'}
-                  activeStrokeSecondaryColor={'grey'}
+                  activeStrokeSecondaryColor={'lime'}
                   inActiveStrokeColor={'#9b59b6'}
                   inActiveStrokeOpacity={0.5}
                   inActiveStrokeWidth={40}
@@ -307,18 +323,7 @@ function MainScreen({ navigation }) {
         </View>
       </View>
   
-      <TouchableHighlight
-        style={styles.circle}
-        underlayColor="lightgrey"
-        onPress={() => navigation.navigate("Settings")}
-      >
-        <Ionicons
-          style={styles.cogs}
-          name={"settings-outline"}
-          size={25}
-          color={"grey"}
-        />
-      </TouchableHighlight>
+      
     </ImageBackground>
   );
 }
@@ -330,7 +335,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   text: {
-    fontSize: 24,
+    fontSize: 28,
     marginBottom: 20,
     color: "white",
   },
@@ -347,22 +352,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  circle: {
-    width: 65,
-    height: 65,
-    borderRadius: 100 / 2,
-    backgroundColor: "white",
-    position: "absolute",
-    top: 30,
-    right: 30,
-  },
-  cogs: {
-    position: "absolute",
-    left: 20,
-    right: 0,
-    top: 20,
-    bottom: 0,
-  },
+ 
+ 
   logo: {
     width: 100,
     height: 100,
@@ -370,8 +361,10 @@ const styles = StyleSheet.create({
   },
 
   titleContainer: {
-    position: "absolute",
-    top: 30,
+    marginTop: "35%",
+    
+    alignItems: "center",
+    justifyContent: "flex-end",
   },
 });
 export default MainScreen;
