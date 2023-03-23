@@ -25,6 +25,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import MultiplierContext from "./MultiplierContext";
+import CountContext from "./CountContext";
 import CircularProgress from 'react-native-circular-progress-indicator';
 
 const Stack = createStackNavigator();
@@ -35,7 +36,7 @@ const backgroundimage = {
 function MainScreen({ navigation }) {
   
   const [foreground, requestForeground] = Location.useForegroundPermissions();
-  const [count, setCount] = useState(0);
+  const {count, setCount} = useContext(CountContext);
   const [initalCount, setInitalCount] = useState(0);
   const [count2, setCount2] = useState(0);
   const { multiplier, setMultiplier } = useContext(MultiplierContext);
@@ -172,7 +173,7 @@ function MainScreen({ navigation }) {
   }
 
   };
-  const getDaily = async () => {
+  const getDaily = async (x) => {
     const isAvailable = await Pedometer.isAvailableAsync();
     setIsPedometerAvailable(String(isAvailable));
 
@@ -187,7 +188,11 @@ function MainScreen({ navigation }) {
         now
       );
       if (pastStepCountResult) {
+        if (pastStepCountResult <= x){
         setDailySteps(pastStepCountResult.steps);
+        } else {
+          setDailySteps(x);
+        }
       }
     }
   };
@@ -226,9 +231,9 @@ function MainScreen({ navigation }) {
   }, [mDate]);
   useEffect(() => {
     if (Platform.OS === "ios"){
-      getDaily();
+      getDaily(recommendedSteps);
     }
-  }, [count]);
+  }, [count,recommendedSteps]);
   
   useEffect(() => {
     const setDate = async () => {
@@ -285,9 +290,6 @@ function MainScreen({ navigation }) {
           <Text style={styles.text}>Points: {count}</Text>
           <Text style={styles.text}>Multiplier: {multiplier}</Text>
           <View style={styles.buttonContainer}>
-            <Button title="clear" onPress={clearStorage} />
-            <Button title="check permissions" onPress={checkLocationPerms} />
-            <Button title="log coords" onPress={logCoords} />
           </View>
           <View
             style={{
@@ -298,7 +300,6 @@ function MainScreen({ navigation }) {
               
             }}
           >
-            
                <CircularProgress
                   value={dailySteps}
                   radius={120}

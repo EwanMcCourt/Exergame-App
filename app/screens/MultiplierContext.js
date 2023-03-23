@@ -5,4 +5,5 @@ const MultiplierContext = React.createContext({
   setMultiplier: () => {},
 });
 
+
 export default MultiplierContext;
