@@ -16,7 +16,8 @@ function MonsterScreen({ navigation }) {
           >
             <View style = {styles.titleContainer}>
                
-                <Text style = {styles.text}> This is the monster screen </Text>
+                <Text style = {styles.text}> This is the monster screen</Text>
+                <Text style = {styles.text}> Coming soon ...</Text>
             </View>
             
         </ImageBackground> 
@@ -27,7 +28,7 @@ const styles = StyleSheet.create({
     background:{
         flex:1,
         fadeDuration: 1000,
-        justifyContent: "flex-end",
+        justifyContent: "center",
         alignItems:"center",
         
     },
@@ -41,11 +42,14 @@ const styles = StyleSheet.create({
         
     },
     text:{
+        fontSize: 24,
         color:"white",
     },
     titleContainer:{
         position: "absolute",
-        top: 30,
+        justifyContent: "center",
+        alignItems:"center",
+        
     },
 })
 export default MonsterScreen;
