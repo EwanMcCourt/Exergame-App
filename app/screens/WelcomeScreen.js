@@ -3,7 +3,7 @@ import { StyleSheet, ImageBackground, View, Image, Text, Button,TouchableOpacity
 
 
 const backgroundimage = {uri: "https://c4.wallpaperflare.com/wallpaper/97/833/155/mountains-firewatch-green-forest-wallpaper-preview.jpg"};
-const icon = {uri:"http://clipart-library.com/images/6cr54jKgi.gif"};
+const icon = {uri:"http://clipart-library.com/images_k/cinderella-castle-silhouette-vector/cinderella-castle-silhouette-vector-13.png"};
 
 function WelcomeScreen({ navigation }) {
     return (
@@ -17,7 +17,7 @@ function WelcomeScreen({ navigation }) {
           >
             <View style = {styles.titleContainer}>
                 <Image style = {styles.logo} source = {icon}/>
-                <Text style = {styles.title}> MonsterFit </Text>
+                <Text style = {styles.title}> CastleFit </Text>
             </View>
             <TouchableHighlight style = {styles.loginButton} underlayColor='#006666' onPress={() => navigation.navigate('Main')}> 
                  <View >
@@ -29,7 +29,7 @@ function WelcomeScreen({ navigation }) {
                  </View>
             </TouchableHighlight >
             
-            <TouchableHighlight style = {styles.registerButton}underlayColor="#206020" onPress={() => console.log("hi")}> 
+            <TouchableHighlight style = {styles.registerButton}underlayColor="#206020" onPress={() => navigation.navigate('Welcome')}> 
                  <View >
                
                   <Text style = {styles.buttonText}>
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     },
     loginButton:{
         width: "85%",
-  height: 70,
+  height: "10%",
   backgroundColor: "#00b3b3",
   borderTopLeftRadius: 10,
   borderTopRightRadius: 10,
@@ -75,14 +75,14 @@ const styles = StyleSheet.create({
   
     },
     logo:{
-        width:100,
-        height:100,
-        left:45,
+        width:150,
+        height:150,
+        
         
     },
     registerButton:{
         width:"95%",
-        height: 70,
+        height: "10%",
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
         borderTopColor: '#0d260d',
@@ -97,12 +97,14 @@ const styles = StyleSheet.create({
     title: {
         fontWeight: "bold",
         color: "black",
-        fontSize: 35,
+        fontSize: 40,
+    
     },
     titleContainer:{
         position: "absolute",
-        top: 30,
-        
+        top: "5%",
+        alignItems:"center",
+        justifyContent: "center",
     },
 })
 export default WelcomeScreen;

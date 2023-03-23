@@ -70,10 +70,14 @@ function DrawerNav({ navigation }) {
 
 
 function Home({ navigation }) {
+  const [count, setCount] = useState(0);
   const [multiplier, setMultiplier] = useState(1);
   const [count, setCount] = useState(0);
 
   return (
+    
+    
+    <CountContext.Provider value ={{count, setCount}}>
     <MultiplierContext.Provider value={{ multiplier, setMultiplier }}>
     <CountContext.Provider value={{ count, setCount }}>
 

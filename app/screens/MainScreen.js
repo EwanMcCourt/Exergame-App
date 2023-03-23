@@ -88,17 +88,9 @@ function MainScreen({ navigation }) {
   if (foreground === null || foreground.status !== "granted") {
     requestForeground();
   }
-  const checkLocationPerms = () => {
-    console.log(foreground);
-  };
+  
 
-  const clearStorage = async () => {
-    try {
-      await AsyncStorage.clear();
-    } catch (error) {
-      console.log("Error clearing AsyncStorage: ", error.message);
-    }
-  };
+ 
   const storeSteps = async () => {
     //https://reactnative.dev/docs/asyncstorage code is from here but the package has been removed, using AsyncStorage from '@react-native-async-storage/async-storage'; works
     try {
@@ -157,7 +149,7 @@ function MainScreen({ navigation }) {
       setMinutes(Math.floor(mins_with_rem));
     }
   };
-  const getDaily = async () => {
+  const getDaily = async (x) => {
     const isAvailable = await Pedometer.isAvailableAsync();
     setIsPedometerAvailable(String(isAvailable));
 
@@ -169,7 +161,11 @@ function MainScreen({ navigation }) {
       const now = new Date();
       const pastStepCountResult = await Pedometer.getStepCountAsync(today, now);
       if (pastStepCountResult) {
+        if (pastStepCountResult <= x){
         setDailySteps(pastStepCountResult.steps);
+        } else {
+          setDailySteps(x);
+        }
       }
     }
   };
@@ -221,7 +217,7 @@ function MainScreen({ navigation }) {
     };
     const timeout = setInterval(() => {
       if (days <= 0 && hours <= 0 && minutes <= 0) {
-        console.log("do the monster fight here");
+        //THE MONSTER FIGHT HAPPENS HERE
         setDate();
       }
     }, 60000);
@@ -264,9 +260,6 @@ function MainScreen({ navigation }) {
           <Text style={styles.text}>Points: {count}</Text>
           <Text style={styles.text}>Multiplier: {multiplier}</Text>
           <View style={styles.buttonContainer}>
-            <Button title="clear" onPress={clearStorage} />
-            <Button title="check permissions" onPress={checkLocationPerms} />
-            <Button title="log coords" onPress={logCoords} />
           </View>
           <View
             style={{
@@ -306,8 +299,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   text: {
-    fontSize: 28,
-    marginBottom: 20,
+    fontSize: 24,
+    marginBottom: "5%",
     color: "white",
   },
   buttonContainer: {
