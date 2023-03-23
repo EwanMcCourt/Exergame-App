@@ -33,7 +33,7 @@ function MapScreen({ navigation }) {
     };
     const fetchPlaces = async () => {
       const {latitude, longitude} = await coords();
-      console.log("trying to get places")
+      
       const query = `[out:json][timeout:25];(node[\"leisure\"=\"park\"][\"name\"](${latitude - 0.03},${longitude - 0.03},${latitude + 0.03},${longitude + 0.03});way[\"leisure\"=\"park\"][\"name\"](${latitude - 0.03},${longitude - 0.03},${latitude + 0.03},${longitude + 0.03});relation[\"leisure\"=\"park\"][\"name\"](${latitude - 0.03},${longitude - 0.03},${latitude + 0.03},${longitude + 0.03}););out body;>;out skel qt;out count 10;`
       //const query = `[out:json][timeout:25];(node[\"leisure\"=\"park\"](${latitude - 0.03},${longitude - 0.03},${latitude + 0.03},${longitude + 0.03});way[\"leisure\"=\"park\"](${latitude - 0.03},${longitude - 0.03},${latitude + 0.03},${longitude + 0.03});relation[\"leisure\"=\"park\"](${latitude - 0.03},${longitude - 0.03},${latitude + 0.03},${longitude + 0.03}););out body;>;out skel qt;out count 10;`
       axios.get(`https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`)
@@ -107,7 +107,7 @@ function MapScreen({ navigation }) {
         //set mult to 1 here
         setMultiplier(1);
       }
-      console.log(minDis)
+      
 
     }
     getDist();
