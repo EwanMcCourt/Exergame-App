@@ -61,18 +61,22 @@ function CastleScreen({ navigation }) {
   };
   const fetchUpgradedMap = () => {
     (async () => {
-      let defaultMap = await AsyncStorage.getItem(`UpgradedMap`);
-      console.log("DEFAULT MAP = ", new Map(JSON.parse(defaultMap)));
-      // if (defaultMap == null) {
-      defaultMap = new Map();
-      defaultMap.set("attack", [false, false, false, false]);
-      defaultMap.set("health", [false, false, false, false]);
-      defaultMap.set("defence", [false, false, false, false]);
-      await AsyncStorage.setItem(
-        "UpgradedMap",
-        JSON.stringify(Array.from(defaultMap.entries()))
-      );
-      // }
+      let defaultMapJSON = await AsyncStorage.getItem(`UpgradedMap`);
+      let defaultMap;
+      console.log("defaultMapJson", defaultMapJSON)
+      if (defaultMapJSON !== null) {
+        defaultMap = new Map(JSON.parse(defaultMapJSON));
+      }
+      if (defaultMapJSON === null) {
+        defaultMap = new Map();
+        defaultMap.set("attack", [false, false, false, false]);
+        defaultMap.set("health", [false, false, false, false]);
+        defaultMap.set("defence", [false, false, false, false]);
+        await AsyncStorage.setItem(
+          "UpgradedMap",
+          JSON.stringify(Array.from(defaultMap.entries()))
+        );
+      }
       setUpgraded(defaultMap);
     })();
   };
@@ -123,7 +127,7 @@ function CastleScreen({ navigation }) {
             <Text style={styles.text}>Current balance : {count}</Text>
             <TouchableHighlight
               onPress={() => {
-                console.log(count)
+                console.log(count);
                 setCount(count + 30000);
               }}
             >

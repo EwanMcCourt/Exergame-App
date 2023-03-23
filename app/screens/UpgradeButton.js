@@ -19,6 +19,7 @@ function UpgradeButton({ message, spec, step, upgradeFunction, upgraded }) {
   const { count, setCount } = useContext(CountContext);
   // setCount(2000);
   const { upgraded: upgradedMap, setUpgraded } = useContext(UpgradedContext);
+  console.log(upgradedMap);
   let upgradedArray = upgradedMap.get(spec);
   const [_, levelStr] = message.split(" ");
   const pos = parseInt(levelStr) - 1;
@@ -69,18 +70,17 @@ function UpgradeButton({ message, spec, step, upgradeFunction, upgraded }) {
     },
   });
 
-  const checkPath = (spec ) => {
-    if(parseInt(levelStr) !== 1){
-    if (!upgradedMap.get(spec)[parseInt(levelStr) - 2]) {
-      return true;
+  const checkPath = (spec) => {
+    if (parseInt(levelStr) !== 1) {
+      if (!upgradedMap.get(spec)[parseInt(levelStr) - 2]) {
+        return true;
+      }
     }
-  }
     return false;
   };
 
   getCSS = function (bool) {
     let result = checkPath(spec, step);
-    console.log("umm,", result);
     if (result) {
       upgraded = true;
       return styles.upgradeButtonUnaffordable;
@@ -106,7 +106,10 @@ function UpgradeButton({ message, spec, step, upgradeFunction, upgraded }) {
       upgradedArray[pos] = true;
       upgradedMap.set(spec, upgradedArray);
       setUpgraded(upgradedMap);
-      await AsyncStorage.setItem(`${(spec, message)}Upgraded`, String(true));
+      await AsyncStorage.setItem(
+        "UpgradedMap",
+        JSON.stringify(Array.from(upgradedMap.entries()))
+      );
       await AsyncStorage.setItem(`${spec}Progress`, String(newVal));
       console.log("count = ", count, " price = ", price);
       setCount(count - price);
