@@ -42,9 +42,7 @@ function CastleScreen({ navigation }) {
       const healthCurrProgress = await getProgress("health");
       const defenseCurrProgress = await getProgress("defence");
 
-      console.log("current progress for attack : " + attackCurrProgress);
-      console.log("current progress for  health : " + healthCurrProgress);
-      console.log("current progress for defense :" + defenseCurrProgress);
+  
 
       setProgress({
         attack: attackCurrProgress,
@@ -57,7 +55,6 @@ function CastleScreen({ navigation }) {
     (async () => {
       let defaultMapJSON = await AsyncStorage.getItem(`UpgradedMap`);
       let defaultMap;
-      console.log("defaultMapJson", defaultMapJSON);
       if (defaultMapJSON !== null) {
         defaultMap = new Map(JSON.parse(defaultMapJSON));
       }
@@ -87,12 +84,9 @@ function CastleScreen({ navigation }) {
       parseFloat(returnVal) > 1 ||
       returnVal === "NaN"
     ) {
-      console.log("null or >1 found");
       await AsyncStorage.setItem(`${spec}Progress`, String(0.2));
-      console.log("the value returned is 0.2");
       return 0.2;
     }
-    console.log("the value returned is " + returnVal);
     return parseFloat(returnVal);
   };
 
@@ -121,7 +115,6 @@ function CastleScreen({ navigation }) {
             <Text style={styles.text}>Current balance : {count}</Text>
             <TouchableHighlight
               onPress={() => {
-                console.log(count);
                 setCount(count + 30000);
               }}
             >

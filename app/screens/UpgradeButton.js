@@ -7,7 +7,6 @@ import UpgradedContext from "./UpgradedContext";
 function UpgradeButton({ message, spec, step, upgradeFunction, upgraded }) {
   const { count, setCount } = useContext(CountContext);
   const { upgraded: upgradedMap, setUpgraded } = useContext(UpgradedContext);
-  console.log(upgradedMap);
   let upgradedArray = upgradedMap.get(spec);
   const [_, levelStr] = message.split(" ");
   const pos = parseInt(levelStr) - 1;
@@ -85,7 +84,6 @@ function UpgradeButton({ message, spec, step, upgradeFunction, upgraded }) {
         JSON.stringify(Array.from(upgradedMap.entries()))
       );
       await AsyncStorage.setItem(`${spec}Progress`, String(newVal));
-      console.log("count = ", count, " price = ", price);
       setCount(count - price);
     } catch (error) {
       console.log(error);
