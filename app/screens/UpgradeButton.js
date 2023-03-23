@@ -1,23 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import CountContext from "./CountContext";
-import {
-  StyleSheet,
-  StatusBar,
-  SafeAreaView,
-  ImageBackground,
-  View,
-  Image,
-  Text,
-  Button,
-  TouchableOpacity,
-  TouchableHighlight,
-} from "react-native";
+import { StyleSheet, View, Text, TouchableHighlight } from "react-native";
 import UpgradedContext from "./UpgradedContext";
 
 function UpgradeButton({ message, spec, step, upgradeFunction, upgraded }) {
   const { count, setCount } = useContext(CountContext);
-  // setCount(2000);
   const { upgraded: upgradedMap, setUpgraded } = useContext(UpgradedContext);
   console.log(upgradedMap);
   let upgradedArray = upgradedMap.get(spec);
@@ -31,9 +19,6 @@ function UpgradeButton({ message, spec, step, upgradeFunction, upgraded }) {
     defence: ["#cc33ff", "#9900cc"],
   };
 
-  useEffect(() => {
-    checkPath(spec, step);
-  }, []);
   const styles = StyleSheet.create({
     upgradeButtonNotUpgraded: {
       width: 75,
@@ -47,17 +32,6 @@ function UpgradeButton({ message, spec, step, upgradeFunction, upgraded }) {
       backgroundColor: colourScheme[spec][0],
     },
     upgradeButtonUpgraded: {
-      width: 75,
-      height: 75,
-      margin: "5%",
-      alignItems: "center",
-      justifyContent: "center",
-      borderColor: "white",
-      borderRadius: 10,
-      borderWidth: 2,
-      backgroundColor: "grey",
-    },
-    upgradeButtonUnaffordable: {
       width: 75,
       height: 75,
       margin: "5%",
@@ -83,11 +57,11 @@ function UpgradeButton({ message, spec, step, upgradeFunction, upgraded }) {
     let result = checkPath(spec, step);
     if (result) {
       upgraded = true;
-      return styles.upgradeButtonUnaffordable;
+      return styles.upgradeButtonUpgraded;
     }
     if (count < price) {
       upgraded = true;
-      return styles.upgradeButtonUnaffordable;
+      return styles.upgradeButtonUpgraded;
     }
     if (!bool) {
       return styles.upgradeButtonNotUpgraded;

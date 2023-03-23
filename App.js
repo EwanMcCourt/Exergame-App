@@ -1,9 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View,Dimensions, Button,StatusBar, Image,ImageBackground,Platform,TextInput, SafeAreaView, TouchableNativeFeedback } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 

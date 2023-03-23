@@ -1,31 +1,18 @@
 import React from "react";
-import Animated, {
+import {
   useSharedValue,
   withTiming,
   useAnimatedStyle,
   Easing,
 } from "react-native-reanimated";
-import {
-  StyleSheet,
-  ImageBackground,
-  View,
-  Image,
-  Text,
-  Button,
-  TouchableOpacity,
-  TouchableHighlight,
-} from "react-native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer } from "@react-navigation/native";
+import { StyleSheet, ImageBackground, View, Text, Button } from "react-native";
 import { Pedometer } from "expo-sensors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Location from "expo-location";
 import { createStackNavigator } from "@react-navigation/stack";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import { useEffect, useState, useContext } from "react";
-import axios from "axios";
 import MultiplierContext from "./MultiplierContext";
-import CountContext  from "./CountContext";
+import CountContext from "./CountContext";
 import CircularProgress from "react-native-circular-progress-indicator";
 
 const Stack = createStackNavigator();
@@ -35,7 +22,7 @@ const backgroundimage = {
 
 function MainScreen({ navigation }) {
   const [foreground, requestForeground] = Location.useForegroundPermissions();
-  const {count, setCount} = useContext(CountContext)
+  const { count, setCount } = useContext(CountContext);
   const [initalCount, setInitalCount] = useState(0);
   const [count2, setCount2] = useState(0);
   const { multiplier, setMultiplier } = useContext(MultiplierContext);
@@ -45,7 +32,6 @@ function MainScreen({ navigation }) {
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
-  const [places, setPlaces] = useState([]);
   const [dailySteps, setDailySteps] = useState([]);
 
   const randomWidth = useSharedValue(10);
@@ -74,7 +60,6 @@ function MainScreen({ navigation }) {
 
     if (isAvailable) {
       return Pedometer.watchStepCount((result) => {
-        // setCurrentStepCount(10000);
         setCurrentStepCount(result.steps);
       });
     } else {
@@ -251,7 +236,6 @@ function MainScreen({ navigation }) {
     const value = initalCount + currentStepCount - count2;
     setCount2(count2 + value);
     setCount(count + Math.ceil(value * multiplier));
-    
   }, [currentStepCount]);
   // useEffect(() => {
   //   if (count == recommendedSteps) {

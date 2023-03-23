@@ -3,17 +3,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   StyleSheet,
   StatusBar,
-  SafeAreaView,
   ImageBackground,
   View,
-  Image,
   Text,
-  Button,
-  TouchableOpacity,
   TouchableHighlight,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import * as Progress from "react-native-progress";
 import UpgradeList from "./UpgradeList";
 import ProgressBar from "./ProgressBar";
 import { useEffect, useState, useContext } from "react";
@@ -63,7 +58,7 @@ function CastleScreen({ navigation }) {
     (async () => {
       let defaultMapJSON = await AsyncStorage.getItem(`UpgradedMap`);
       let defaultMap;
-      console.log("defaultMapJson", defaultMapJSON)
+      console.log("defaultMapJson", defaultMapJSON);
       if (defaultMapJSON !== null) {
         defaultMap = new Map(JSON.parse(defaultMapJSON));
       }
