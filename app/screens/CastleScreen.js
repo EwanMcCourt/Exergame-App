@@ -24,7 +24,6 @@ const backgroundimage = {
 function CastleScreen({ navigation }) {
   let { upgraded, setUpgraded } = useContext(UpgradedContext);
   [upgraded, setUpgraded] = useState(upgraded);
-  const { count, setCount } = useContext(CountContext);
   // const clearStorage = async ()=>{
   //     await AsyncStorage.removeItem("attackProgress")
   //     await AsyncStorage.removeItem("healthProgress")
