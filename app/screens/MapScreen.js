@@ -12,22 +12,19 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import MapView, { Circle } from "react-native-maps";
 import { useEffect, useState, useContext  } from "react";
 import * as Location from "expo-location";
-import axios from 'axios';
-import { getDistance } from 'geolib';
-import MultiplierContext from './MultiplierContext';
+import axios from "axios";
+import { getDistance } from "geolib";
+import MultiplierContext from "./MultiplierContext";
+
 
 const backgroundimage = {
   uri: "https://cdn.pixabay.com/photo/2016/03/06/06/42/low-poly-1239778_960_720.jpg",
 };
 
-
 function MapScreen({ navigation }) {
   const [places, setPlaces] = useState([]);
+  const [userLocation, setUserLocation] = useState(null);
   const { multiplier, setMultiplier } = useContext(MultiplierContext);
-  const center = {
-    latitude: 51.505,
-    longitude: -0.09,
-  };
   const radius = 350;
   useEffect(() => {
     const coords = async () => {
@@ -79,7 +76,15 @@ function MapScreen({ navigation }) {
     fetchPlaces();
   }, []);
   
-  
+  useEffect(() =>{
+    const coords3 = async () => {
+      const coord = (await Location.getCurrentPositionAsync()).coords;
+      const region =  {latitude: coord.latitude, longitude: coord.longitude, latitudeDelta: 0.0922, longitudeDelta: 0.0421,} ;
+      setUserLocation(region)
+    };
+    coords3();
+  },[]);
+
   useEffect(() => {
     const coords2 = async () => {
       const coord = (await Location.getCurrentPositionAsync()).coords;
@@ -105,6 +110,7 @@ function MapScreen({ navigation }) {
       console.log(minDis)
 
     }
+    getDist();
     const interval = setInterval(() => {
       getDist();
     }, 30000);
@@ -117,10 +123,10 @@ function MapScreen({ navigation }) {
       fadeDuration={1000}
       style={styles.background}
     >
-      
       <MapView
         style={styles.map}
         showsUserLocation={true}
+        initialRegion={userLocation}
       >
         {places.map(element => (
           <Circle
@@ -130,13 +136,12 @@ function MapScreen({ navigation }) {
               longitude: element.longitude
             }}
             radius={radius}
-            fillColor="rgba(255, 0, 0, 0.2)" // 20% transparent
-            strokeColor="rgba(255, 0, 0, 0.5)" // 50% transparent
+            fillColor="rgba(0, 0, 128, 0.1)"
+            strokeColor="rgba(0, 0, 128, 0.3)"
             strokeWidth={2}
           />
   ))}
       </MapView>
-      
     </ImageBackground>
   );
 }

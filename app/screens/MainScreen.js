@@ -172,7 +172,7 @@ function MainScreen({ navigation }) {
   }
 
   };
-  const getDaily = async () => {
+  const getDaily = async (x) => {
     const isAvailable = await Pedometer.isAvailableAsync();
     setIsPedometerAvailable(String(isAvailable));
 
@@ -187,10 +187,10 @@ function MainScreen({ navigation }) {
         now
       );
       if (pastStepCountResult) {
-        if (pastStepCountResult <= 4000){
+        if (pastStepCountResult <= x){
         setDailySteps(pastStepCountResult.steps);
         } else {
-          setDailySteps(4000);
+          setDailySteps(x);
         }
       }
     }
@@ -230,9 +230,9 @@ function MainScreen({ navigation }) {
   }, [mDate]);
   useEffect(() => {
     if (Platform.OS === "ios"){
-      getDaily();
+      getDaily(recommendedSteps);
     }
-  }, [count]);
+  }, [count,recommendedSteps]);
   
   useEffect(() => {
     const setDate = async () => {
