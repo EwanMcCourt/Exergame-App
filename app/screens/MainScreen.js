@@ -187,7 +187,11 @@ function MainScreen({ navigation }) {
         now
       );
       if (pastStepCountResult) {
+        if (pastStepCountResult <= 4000){
         setDailySteps(pastStepCountResult.steps);
+        } else {
+          setDailySteps(4000);
+        }
       }
     }
   };
@@ -298,7 +302,6 @@ function MainScreen({ navigation }) {
               
             }}
           >
-            
                <CircularProgress
                   value={dailySteps}
                   radius={120}
