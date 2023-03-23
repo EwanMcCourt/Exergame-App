@@ -10,7 +10,7 @@ function UpgradeList({spec, upgradeFunc}) {
         {[...Array(levels).keys()].map(key => 
         {   console.log("key" + key)
             return(
-                <UpgradeButton message = {"Level " + (key+1)} spec = { spec } step = {steps} upgradeFunction = {upgradeFunc}></UpgradeButton>)
+                <UpgradeButton key = {key} message = {"Level " + (key+1)} spec = { spec } step = {steps} upgradeFunction = {upgradeFunc}></UpgradeButton>)
 
             })}
    </View>
