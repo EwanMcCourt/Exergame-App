@@ -5,5 +5,4 @@ const CountContext = React.createContext({
   setCount: () => {},
 });
 
-
 export default CountContext;

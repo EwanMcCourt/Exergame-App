@@ -1,6 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Text, View, StyleSheet } from "react-native";
-import { TouchableHighlight } from "react-native-gesture-handler";
 import * as Progress from "react-native-progress";
 function ProgressBar({ spec, currentProgress }) {
   let colourScheme = {
