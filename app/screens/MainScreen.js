@@ -157,7 +157,6 @@ function MainScreen({ navigation }) {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
-      console.log(today);
       const now = new Date();
       const pastStepCountResult = await Pedometer.getStepCountAsync(today, now);
       if (pastStepCountResult) {
