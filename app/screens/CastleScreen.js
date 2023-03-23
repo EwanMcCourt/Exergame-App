@@ -16,7 +16,9 @@ import { ScrollView } from "react-native-gesture-handler";
 import * as Progress from "react-native-progress";
 import UpgradeList from "./UpgradeList";
 import ProgressBar from "./ProgressBar";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import CountContext from "./CountContext";
+
 
 const backgroundimage = {
   uri: "https://cdn.pixabay.com/photo/2016/03/06/06/42/low-poly-1239778_960_720.jpg",
@@ -30,7 +32,7 @@ function CastleScreen({ navigation }) {
   //     await AsyncStorage.removeItem("healthProgress")
   //     await AsyncStorage.removeItem("defenceProgress")
   // }
-
+  const {count, setCount} = useContext(CountContext);
   [currentProgresses, setProgress] = useState({
     attack: [0.4],
     health: [0.2],
@@ -107,7 +109,7 @@ function CastleScreen({ navigation }) {
             onPress={() => console.log("hi")}
           >
             <View>
-              <Text>Join the Fight</Text>
+              <Text>{count}</Text>
             </View>
           </TouchableHighlight>
         </View>
