@@ -159,15 +159,7 @@ const styles = StyleSheet.create({
     height: "100%",
   },
  
-  logo: {
-    width: 100,
-    height: 100,
-    alignItems: "center",
-  },
 
-  titleContainer: {
-    position: "absolute",
-    top: 30,
-  },
+
 });
 export default MapScreen;

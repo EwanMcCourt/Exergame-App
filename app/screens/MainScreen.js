@@ -336,8 +336,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   text: {
-    fontSize: 28,
-    marginBottom: 20,
+    fontSize: 24,
+    marginBottom: "5%",
     color: "white",
   },
   buttonContainer: {
@@ -355,11 +355,7 @@ const styles = StyleSheet.create({
 
  
  
-  logo: {
-    width: 100,
-    height: 100,
-    alignItems: "center",
-  },
+  
 
   titleContainer: {
     marginTop: "35%",
