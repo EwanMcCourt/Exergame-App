@@ -12,6 +12,7 @@ function UpgradeList({ spec, upgradeFunc }) {
       {[...Array(levels).keys()].map((key) => {
         return (
           <UpgradeButton
+            key = {key}
             message={"Level " + (key + 1)}
             spec={spec}
             step={steps}

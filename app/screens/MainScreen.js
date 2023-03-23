@@ -204,7 +204,7 @@ function MainScreen({ navigation }) {
   }, [mDate]);
   useEffect(() => {
     if (Platform.OS === "ios") {
-      getDaily();
+      getDaily(recommendedSteps);
     }
   }, [count]);
 
