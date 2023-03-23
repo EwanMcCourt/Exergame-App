@@ -34,9 +34,9 @@ function CastleScreen({ navigation }) {
   // }
   const {count, setCount} = useContext(CountContext);
   [currentProgresses, setProgress] = useState({
-    attack: [0.4],
-    health: [0.2],
-    defence: [0.6],
+    attack: 0.4,
+    health: 0.2,
+    defence: 0.6,
   });
 
   const upgrade = () => {
