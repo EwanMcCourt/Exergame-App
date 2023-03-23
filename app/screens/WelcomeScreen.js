@@ -29,7 +29,7 @@ function WelcomeScreen({ navigation }) {
                  </View>
             </TouchableHighlight >
             
-            <TouchableHighlight style = {styles.registerButton}underlayColor="#206020" onPress={() => console.log("hi")}> 
+            <TouchableHighlight style = {styles.registerButton}underlayColor="#206020" onPress={() => navigation.navigate('Welcome')}> 
                  <View >
                
                   <Text style = {styles.buttonText}>

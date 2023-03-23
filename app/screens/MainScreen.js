@@ -103,17 +103,9 @@ function MainScreen({ navigation }) {
   if (foreground === null || foreground.status !== "granted") {
     requestForeground();
   }
-  const checkLocationPerms = () => {
-    console.log(foreground);
-  };
+  
 
-  const clearStorage = async () => {
-    try {
-      await AsyncStorage.clear();
-    } catch (error) {
-      console.log("Error clearing AsyncStorage: ", error.message);
-    }
-  };
+ 
   const storeSteps = async () => {
     //https://reactnative.dev/docs/asyncstorage code is from here but the package has been removed, using AsyncStorage from '@react-native-async-storage/async-storage'; works
     try {
@@ -181,7 +173,7 @@ function MainScreen({ navigation }) {
       const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        console.log(today);
+        
       const now = new Date();
       const pastStepCountResult = await Pedometer.getStepCountAsync(
         today,
@@ -244,7 +236,7 @@ function MainScreen({ navigation }) {
     }
     const timeout = setInterval(() => {
       if (days <= 0 && hours <= 0 && minutes <= 0) {
-        console.log("do the monster fight here");
+        //THE MONSTER FIGHT HAPPENS HERE
         setDate();
       }
     }, 60000);
