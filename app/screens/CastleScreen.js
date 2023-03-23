@@ -16,15 +16,20 @@ import { ScrollView } from "react-native-gesture-handler";
 import * as Progress from "react-native-progress";
 import UpgradeList from "./UpgradeList";
 import ProgressBar from "./ProgressBar";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import CountContext from "./CountContext";
+import UpgradedContext from "./UpgradedContext";
+
+// const { count, Setcount } = useContext(CountContext);
 
 const backgroundimage = {
   uri: "https://cdn.pixabay.com/photo/2016/03/06/06/42/low-poly-1239778_960_720.jpg",
 };
 
-
-
 function CastleScreen({ navigation }) {
+  let { upgraded, setUpgraded } = useContext(UpgradedContext);
+  [upgraded, setUpgraded] = useState(upgraded);
+  const { count, setCount } = useContext(CountContext);
   // const clearStorage = async ()=>{
   //     await AsyncStorage.removeItem("attackProgress")
   //     await AsyncStorage.removeItem("healthProgress")
@@ -54,9 +59,27 @@ function CastleScreen({ navigation }) {
       });
     })();
   };
+  const fetchUpgradedMap = () => {
+    (async () => {
+      let defaultMap = await AsyncStorage.getItem(`UpgradedMap`);
+      console.log("DEFAULT MAP = ", new Map(JSON.parse(defaultMap)));
+      // if (defaultMap == null) {
+      defaultMap = new Map();
+      defaultMap.set("attack", [false, false, false, false]);
+      defaultMap.set("health", [false, false, false, false]);
+      defaultMap.set("defence", [false, false, false, false]);
+      await AsyncStorage.setItem(
+        "UpgradedMap",
+        JSON.stringify(Array.from(defaultMap.entries()))
+      );
+      // }
+      setUpgraded(defaultMap);
+    })();
+  };
 
   useEffect(() => {
     upgrade();
+    fetchUpgradedMap();
   }, []);
 
   const getProgress = async (spec) => {
@@ -76,61 +99,60 @@ function CastleScreen({ navigation }) {
   };
 
   return (
-    <ImageBackground
-      source={backgroundimage}
-      fadeDuration={1000}
-      style={styles.container}
-    >
-      <ScrollView style={styles.scrollView}>
-        {/* <Button onPress={clearStorage()} title = "clear"/> */}
-        <ProgressBar spec="health" currentProgress={currentProgresses.health} />
-        <ProgressBar spec="attack" currentProgress={currentProgresses.attack} />
-        <ProgressBar
-          spec="defence"
-          currentProgress={currentProgresses.defence}
-        />
-        <View style={styles.upgradeContainer1}>
-          <TouchableHighlight
-            style={styles.upgradeButton}
-            underlayColor="#996300"
-            onPress={() => console.log("hi")}
-          >
-            <View>
-              <Text>Build Castle</Text>
+    <UpgradedContext.Provider value={{ upgraded, setUpgraded }}>
+      <ImageBackground
+        source={backgroundimage}
+        fadeDuration={1000}
+        style={styles.container}
+      >
+        <ScrollView style={styles.scrollView}>
+          {/* <Button onPress={clearStorage()} title = "clear"/> */}
+          <ProgressBar
+            spec="health"
+            currentProgress={currentProgresses.health}
+          />
+          <ProgressBar
+            spec="attack"
+            currentProgress={currentProgresses.attack}
+          />
+          <ProgressBar
+            spec="defence"
+            currentProgress={currentProgresses.defence}
+          />
+          <CountContext.Provider value={{ count }}>
+            <Text style={styles.text}>Current balance : {count}</Text>
+            <TouchableHighlight
+              onPress={() => {
+                console.log(count)
+                setCount(count + 30000);
+              }}
+            >
+              <View>
+                <Text>Add currency</Text>
+              </View>
+            </TouchableHighlight>
+          </CountContext.Provider>
+          <View style={styles.upgradeContainer2}>
+            <View style={styles.headers}>
+              <Text style={styles.text}>Health</Text>
             </View>
-          </TouchableHighlight>
-        </View>
-        <View style={styles.upgradeContainer1}>
-          <TouchableHighlight
-            style={styles.upgradeButton}
-            underlayColor="#996300"
-            onPress={() => console.log("hi")}
-          >
-            <View>
-              <Text>Join the Fight</Text>
+
+            <View style={styles.headers}>
+              <Text style={styles.text}>Attack</Text>
             </View>
-          </TouchableHighlight>
-        </View>
-        <View style={styles.upgradeContainer2}>
-          <View style={styles.headers}>
-            <Text style={styles.text}>Health</Text>
-          </View>
 
-          <View style={styles.headers}>
-            <Text style={styles.text}>Attack</Text>
+            <View style={styles.headers}>
+              <Text style={styles.text}>Defence</Text>
+            </View>
           </View>
-
-          <View style={styles.headers}>
-            <Text style={styles.text}>Defence</Text>
+          <View style={styles.upgradeContainer2}>
+            <UpgradeList spec="health" upgradeFunc={upgrade}></UpgradeList>
+            <UpgradeList spec="attack" upgradeFunc={upgrade}></UpgradeList>
+            <UpgradeList spec="defence" upgradeFunc={upgrade}></UpgradeList>
           </View>
-        </View>
-        <View style={styles.upgradeContainer2}>
-          <UpgradeList spec="health" upgradeFunc={upgrade}></UpgradeList>
-          <UpgradeList spec="attack" upgradeFunc={upgrade}></UpgradeList>
-          <UpgradeList spec="defence" upgradeFunc={upgrade}></UpgradeList>
-        </View>
-      </ScrollView>
-    </ImageBackground>
+        </ScrollView>
+      </ImageBackground>
+    </UpgradedContext.Provider>
   );
 }
 
@@ -144,10 +166,8 @@ const styles = StyleSheet.create({
     width: 75,
     height: 75,
 
-    
-   
     borderBottomWidth: 1.5,
-    borderBottomColor: 'white',
+    borderBottomColor: "white",
 
     marginLeft: "5%",
     marginRight: "5%",
@@ -192,7 +212,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "white",
     borderBottomColor: "white",
- 
   },
 });
 export default CastleScreen;

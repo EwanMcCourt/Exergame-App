@@ -25,7 +25,8 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import MultiplierContext from "./MultiplierContext";
-import CircularProgress from 'react-native-circular-progress-indicator';
+import CountContext  from "./CountContext";
+import CircularProgress from "react-native-circular-progress-indicator";
 
 const Stack = createStackNavigator();
 const backgroundimage = {
@@ -33,9 +34,8 @@ const backgroundimage = {
 };
 
 function MainScreen({ navigation }) {
-  
   const [foreground, requestForeground] = Location.useForegroundPermissions();
-  const [count, setCount] = useState(0);
+  const {count, setCount} = useContext(CountContext)
   const [initalCount, setInitalCount] = useState(0);
   const [count2, setCount2] = useState(0);
   const { multiplier, setMultiplier } = useContext(MultiplierContext);
@@ -74,6 +74,7 @@ function MainScreen({ navigation }) {
 
     if (isAvailable) {
       return Pedometer.watchStepCount((result) => {
+        // setCurrentStepCount(10000);
         setCurrentStepCount(result.steps);
       });
     } else {
@@ -156,8 +157,8 @@ function MainScreen({ navigation }) {
     }
   };
   const getTimes = () => {
-    const seconds = (mDate.getTime() - new Date().getTime());
-    if (seconds < 1){
+    const seconds = mDate.getTime() - new Date().getTime();
+    if (seconds < 1) {
       setDays(0);
       setHours(0);
       setMinutes(0);
@@ -169,8 +170,7 @@ function MainScreen({ navigation }) {
       setHours(Math.floor(hours_with_rem));
       const mins_with_rem = (hours_with_rem - Math.floor(hours_with_rem)) * 60;
       setMinutes(Math.floor(mins_with_rem));
-  }
-
+    }
   };
   const getDaily = async () => {
     const isAvailable = await Pedometer.isAvailableAsync();
@@ -178,20 +178,17 @@ function MainScreen({ navigation }) {
 
     if (isAvailable) {
       const today = new Date();
-        today.setHours(0, 0, 0, 0);
+      today.setHours(0, 0, 0, 0);
 
-        console.log(today);
+      console.log(today);
       const now = new Date();
-      const pastStepCountResult = await Pedometer.getStepCountAsync(
-        today,
-        now
-      );
+      const pastStepCountResult = await Pedometer.getStepCountAsync(today, now);
       if (pastStepCountResult) {
         setDailySteps(pastStepCountResult.steps);
       }
     }
   };
-  
+
   const loadMonsterDate = async () => {
     try {
       const value = await AsyncStorage.getItem("@mdate");
@@ -225,18 +222,18 @@ function MainScreen({ navigation }) {
     return () => clearInterval(interval);
   }, [mDate]);
   useEffect(() => {
-    if (Platform.OS === "ios"){
+    if (Platform.OS === "ios") {
       getDaily();
     }
   }, [count]);
-  
+
   useEffect(() => {
     const setDate = async () => {
       const mdate = new Date();
       mdate.setDate(mdate.getDate() + 7);
       await AsyncStorage.setItem("@mdate", mdate.toISOString());
       setMDate(mdate);
-    }
+    };
     const timeout = setInterval(() => {
       if (days <= 0 && hours <= 0 && minutes <= 0) {
         console.log("do the monster fight here");
@@ -254,6 +251,7 @@ function MainScreen({ navigation }) {
     const value = initalCount + currentStepCount - count2;
     setCount2(count2 + value);
     setCount(count + Math.ceil(value * multiplier));
+    
   }, [currentStepCount]);
   // useEffect(() => {
   //   if (count == recommendedSteps) {
@@ -262,7 +260,7 @@ function MainScreen({ navigation }) {
   // }, [count]);
   // useEffect(() => {
   //   const interval = setInterval(() => {
-  //     setCount(0); 
+  //     setCount(0);
   //   }, 24 * 60 * 60 * 1000);
 
   //   return () => clearInterval(interval);
@@ -274,9 +272,6 @@ function MainScreen({ navigation }) {
       fadeDuration={1000}
       style={styles.background}
     >
-    
-     
-  
       <View style={styles.titleContainer}>
         <View style={styles.container}>
           <Text style={styles.text}>
@@ -295,35 +290,27 @@ function MainScreen({ navigation }) {
               alignItems: "center",
               justifyContent: "center",
               flexDirection: "column",
-              
             }}
           >
-            
-               <CircularProgress
-                  value={dailySteps}
-                  radius={120}
-                  duration={2000}
-                  progressValueColor={'white'}
-                  maxValue={recommendedSteps}
-                  title= "Steps"
-                  titleColor={'white'}
-                  titleStyle={{fontWeight: 'bold'}}
-                  activeStrokeColor={'aqua'}
-                  activeStrokeSecondaryColor={'lime'}
-                  inActiveStrokeColor={'#9b59b6'}
-                  inActiveStrokeOpacity={0.5}
-                  inActiveStrokeWidth={40}
-                  activeStrokeWidth={20}
-                
-  
-  
-      />
-
+            <CircularProgress
+              value={dailySteps}
+              radius={120}
+              duration={2000}
+              progressValueColor={"white"}
+              maxValue={recommendedSteps}
+              title="Steps"
+              titleColor={"white"}
+              titleStyle={{ fontWeight: "bold" }}
+              activeStrokeColor={"aqua"}
+              activeStrokeSecondaryColor={"lime"}
+              inActiveStrokeColor={"#9b59b6"}
+              inActiveStrokeOpacity={0.5}
+              inActiveStrokeWidth={40}
+              activeStrokeWidth={20}
+            />
           </View>
         </View>
       </View>
-  
-      
     </ImageBackground>
   );
 }
@@ -352,8 +339,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
- 
- 
   logo: {
     width: 100,
     height: 100,
@@ -362,7 +347,7 @@ const styles = StyleSheet.create({
 
   titleContainer: {
     marginTop: "35%",
-    
+
     alignItems: "center",
     justifyContent: "flex-end",
   },

@@ -17,6 +17,7 @@ import MonsterScreen from './app/screens/MonsterScreen';
 import MainScreen from './app/screens/MainScreen';
 import CastleScreen from './app/screens/CastleScreen';
 import MultiplierContext from './app/screens/MultiplierContext';
+import CountContext from './app/screens/CountContext';
 import {useState} from "react";
 import { useRoute } from '@react-navigation/native';
 
@@ -72,8 +73,12 @@ function DrawerNav({ navigation }) {
 
 function Home({ navigation }) {
   const [multiplier, setMultiplier] = useState(1);
+  const [count, setCount] = useState(0);
+
   return (
     <MultiplierContext.Provider value={{ multiplier, setMultiplier }}>
+    <CountContext.Provider value={{ count, setCount }}>
+
     <Tab.Navigator
     initialRouteName="MainScreen"
     tabBarPosition="bottom"
@@ -132,7 +137,9 @@ function Home({ navigation }) {
       options={{ tabBarLabel: 'Map' }}
     />
   </Tab.Navigator>
+  </CountContext.Provider>
   </MultiplierContext.Provider>
+
   );
 }
 

@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import CountContext from "./CountContext";
 import {
   StyleSheet,
   StatusBar,
@@ -12,18 +13,26 @@ import {
   TouchableOpacity,
   TouchableHighlight,
 } from "react-native";
+import UpgradedContext from "./UpgradedContext";
 
 function UpgradeButton({ message, spec, step, upgradeFunction, upgraded }) {
-  console.log(upgraded)
+  const { count, setCount } = useContext(CountContext);
+  // setCount(2000);
+  const { upgraded: upgradedMap, setUpgraded } = useContext(UpgradedContext);
+  let upgradedArray = upgradedMap.get(spec);
+  const [_, levelStr] = message.split(" ");
+  const pos = parseInt(levelStr) - 1;
+  let price = parseInt(levelStr) * 1000;
+  upgraded = upgradedArray[pos];
   let colourScheme = {
     attack: ["#33ccff", "#0099cc"],
     health: ["red", "#990000"],
     defence: ["#cc33ff", "#9900cc"],
   };
-  // useEffect(() => {
-  //   check();
-  //   console.log("upgraded = ", upgraded);
-  // }, []);
+
+  useEffect(() => {
+    checkPath(spec, step);
+  }, []);
   const styles = StyleSheet.create({
     upgradeButtonNotUpgraded: {
       width: 75,
@@ -45,12 +54,41 @@ function UpgradeButton({ message, spec, step, upgradeFunction, upgraded }) {
       borderColor: "white",
       borderRadius: 10,
       borderWidth: 2,
-      backgroundColor: "yellow",
+      backgroundColor: "grey",
+    },
+    upgradeButtonUnaffordable: {
+      width: 75,
+      height: 75,
+      margin: "5%",
+      alignItems: "center",
+      justifyContent: "center",
+      borderColor: "white",
+      borderRadius: 10,
+      borderWidth: 2,
+      backgroundColor: "grey",
     },
   });
 
+  const checkPath = (spec ) => {
+    if(parseInt(levelStr) !== 1){
+    if (!upgradedMap.get(spec)[parseInt(levelStr) - 2]) {
+      return true;
+    }
+  }
+    return false;
+  };
+
   getCSS = function (bool) {
-    console.log("bool: ", bool, "for :", message, spec);
+    let result = checkPath(spec, step);
+    console.log("umm,", result);
+    if (result) {
+      upgraded = true;
+      return styles.upgradeButtonUnaffordable;
+    }
+    if (count < price) {
+      upgraded = true;
+      return styles.upgradeButtonUnaffordable;
+    }
     if (!bool) {
       return styles.upgradeButtonNotUpgraded;
     } else {
@@ -65,8 +103,13 @@ function UpgradeButton({ message, spec, step, upgradeFunction, upgraded }) {
     try {
       let newVal =
         parseFloat(await AsyncStorage.getItem(`${spec}Progress`)) + step;
+      upgradedArray[pos] = true;
+      upgradedMap.set(spec, upgradedArray);
+      setUpgraded(upgradedMap);
       await AsyncStorage.setItem(`${(spec, message)}Upgraded`, String(true));
       await AsyncStorage.setItem(`${spec}Progress`, String(newVal));
+      console.log("count = ", count, " price = ", price);
+      setCount(count - price);
     } catch (error) {
       console.log(error);
     }
@@ -76,6 +119,7 @@ function UpgradeButton({ message, spec, step, upgradeFunction, upgraded }) {
     <TouchableHighlight
       style={this.getCSS(upgraded)}
       underlayColor={colourScheme[spec][1]}
+      disabled={upgraded}
       onPress={async () => {
         await upgrade(spec, step);
         upgradeFunction();
@@ -83,6 +127,7 @@ function UpgradeButton({ message, spec, step, upgradeFunction, upgraded }) {
     >
       <View>
         <Text>{message}</Text>
+        <Text style={{ fontSize: 10 }}>Cost: {price}</Text>
       </View>
     </TouchableHighlight>
   );
