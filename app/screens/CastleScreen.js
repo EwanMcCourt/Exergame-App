@@ -34,55 +34,47 @@ function CastleScreen({ navigation }) {
   // }
   const {count, setCount} = useContext(CountContext);
   [currentProgresses, setProgress] = useState({
-    attack: 0.4,
-    health: 0.2,
-    defence: 0.6,
+    attack: 0,
+    health: 0,
+    defence: 0,
   });
-
-  const upgrade = () => {
-    (async () => {
-      const attackCurrProgress = await getProgress("attack");
-      const healthCurrProgress = await getProgress("health");
-      const defenseCurrProgress = await getProgress("defence");
-
-      console.log("current progress for attack : " + attackCurrProgress);
-      console.log("current progress for  health : " + healthCurrProgress);
-      console.log("current progress for defense :" + defenseCurrProgress);
-
-      setProgress({
-        attack: attackCurrProgress,
-        defence: defenseCurrProgress,
-        health: healthCurrProgress,
-      });
-    })();
-  };
-
+  //levels
+  const [hLevel, setHLevel] = useState(1);
+  const [aLevel, setALevel] = useState(1);
+  const [dLevel, setDLevel] = useState(1);
+  //costs
+  const [hCost, setHCost] = useState(1000);
+  const [aCost, setACost] = useState(1000);
+  const [dCost, setDCost] = useState(1000);
+  //buttons
+  const [hButton, setHButton] = useState(false);
+  const [aButton, setAButton] = useState(false);
+  const [dButton, setDButton] = useState(false);
+  const [hBTitle, setHBTitle] = useState("Buy");
+  const [aBTitle, setABTitle] = useState("Buy");
+  const [dBTitle, setDBTitle] = useState("Buy");
   useEffect(() => {
-    upgrade();
-  }, []);
-
-  const getProgress = async (spec) => {
-    let returnVal = await AsyncStorage.getItem(`${spec}Progress`);
-    if (
-      returnVal === null ||
-      parseFloat(returnVal) > 1 ||
-      returnVal === "NaN"
-    ) {
-      console.log("null or >1 found");
-      await AsyncStorage.setItem(`${spec}Progress`, String(0.2));
-      console.log("the value returned is 0.2");
-      return 0.2;
-    }
-    console.log("the value returned is " + returnVal);
-    return parseFloat(returnVal);
-  };
-
+    if (hLevel < 5 ){setHCost(hLevel*1000);} else 
+    {setHCost("Complete");
+     setHButton(true);
+     setHBTitle("Complete");}
+    if (dLevel < 5 ){setDCost(dLevel*1000);} else 
+    {setDCost("Complete");
+    setDButton(true);
+    setDBTitle("Complete");}
+    if (aLevel < 5 ){setACost(aLevel*1000);} else 
+    {setACost("Complete");
+    setAButton(true);
+    setABTitle("Complete");}
+  }, [hLevel,aLevel,dLevel]);
   return (
     <ImageBackground
       source={backgroundimage}
       fadeDuration={1000}
       style={styles.container}
     >
+      <Text style={styles.text}>Points: {count}</Text>
+      
       <ScrollView style={styles.scrollView}>
         {/* <Button onPress={clearStorage()} title = "clear"/> */}
         <ProgressBar spec="health" currentProgress={currentProgresses.health} />
@@ -91,45 +83,29 @@ function CastleScreen({ navigation }) {
           spec="defence"
           currentProgress={currentProgresses.defence}
         />
-        <View style={styles.upgradeContainer1}>
-          <TouchableHighlight
-            style={styles.upgradeButton}
-            underlayColor="#996300"
-            onPress={() => console.log("hi")}
-          >
-            <View>
-              <Text>Build Castle</Text>
-            </View>
-          </TouchableHighlight>
-        </View>
-        <View style={styles.upgradeContainer1}>
-          <TouchableHighlight
-            style={styles.upgradeButton}
-            underlayColor="#996300"
-            onPress={() => console.log("hi")}
-          >
-            <View>
-              <Text>{count}</Text>
-            </View>
-          </TouchableHighlight>
-        </View>
-        <View style={styles.upgradeContainer2}>
-          <View style={styles.headers}>
-            <Text style={styles.text}>Health</Text>
-          </View>
-
-          <View style={styles.headers}>
-            <Text style={styles.text}>Attack</Text>
-          </View>
-
-          <View style={styles.headers}>
-            <Text style={styles.text}>Defence</Text>
+        <View style={{ backgroundColor: 'red', height: 100, width: 300, marginTop:20, }}>
+          <Text style={{ color: 'white' }}>Health</Text>
+          <Text style={{ color: 'white' }}>Cost: {hCost}</Text>
+          <Text style={{ color: 'white' }}>Level: {hLevel}/5</Text>
+          <View style={{ position: 'absolute', bottom: 0, right: 0 }}>
+            <Button title={hBTitle} onPress={() => setHLevel(hLevel + 1)} disabled = {hButton} />
           </View>
         </View>
-        <View style={styles.upgradeContainer2}>
-          <UpgradeList spec="health" upgradeFunc={upgrade}></UpgradeList>
-          <UpgradeList spec="attack" upgradeFunc={upgrade}></UpgradeList>
-          <UpgradeList spec="defence" upgradeFunc={upgrade}></UpgradeList>
+        <View style={{ backgroundColor: 'blue', height: 100, width: 300, marginTop:20, }}>
+          <Text style={{ color: 'white' }}>Attack</Text>
+          <Text style={{ color: 'white' }}>Cost: {aCost}</Text>
+          <Text style={{ color: 'white' }}>Level: {aLevel}/5</Text>
+          <View style={{ position: 'absolute', bottom: 0, right: 0 }}>
+            <Button title={aBTitle} onPress={() => setALevel(aLevel + 1)} disabled = {aButton} />
+          </View>
+        </View>
+        <View style={{ backgroundColor: 'purple', height: 100, width: 300, marginTop:20, }}>
+          <Text style={{ color: 'white' }}>Defence</Text>
+          <Text style={{ color: 'white' }}>Cost: {dCost}</Text>
+          <Text style={{ color: 'white' }}>Level: {dLevel}/5</Text>
+          <View style={{ position: 'absolute', bottom: 0, right: 0 }}>
+            <Button title={dBTitle} onPress={() => setDLevel(dLevel + 1)} disabled = {dButton} />
+          </View>
         </View>
       </ScrollView>
     </ImageBackground>
@@ -137,9 +113,14 @@ function CastleScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  text: {
+    fontSize: 40,
+    color: "white",
+  },
   container: {
     flex: 1,
-    paddingTop: StatusBar.currentHeight,
+    paddingTop: 25,
+    paddingLeft: 10,
     alignItems: "center",
   },
   headers: {

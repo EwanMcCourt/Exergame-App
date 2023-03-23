@@ -63,11 +63,6 @@ function MainScreen({ navigation }) {
     };
   });
 
-  const logCoords = async () => {
-    const { latitude, longitude } = (await Location.getCurrentPositionAsync())
-      .coords;
-    return latitude, longitude;
-  };
 
   const subscribe = async () => {
     const isAvailable = await Pedometer.isAvailableAsync();
