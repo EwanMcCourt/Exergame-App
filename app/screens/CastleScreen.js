@@ -32,6 +32,14 @@ function CastleScreen({ navigation }) {
   //     await AsyncStorage.removeItem("defenceProgress")
   // }
   const {count, setCount} = useContext(CountContext);
+  const clearAsyncStorage = async () => {
+    try {
+      await AsyncStorage.clear();
+      console.log('Async Storage cleared successfully.');
+    } catch (error) {
+      console.log('Error clearing Async Storage: ', error.message);
+    }
+  };
   [currentProgress, setCurrentProgress] = useState({
     attack: 0,
     health: 0,
@@ -52,6 +60,64 @@ function CastleScreen({ navigation }) {
   const [hBTitle, setHBTitle] = useState("Buy");
   const [aBTitle, setABTitle] = useState("Buy");
   const [dBTitle, setDBTitle] = useState("Buy");
+  
+  const storeProgress = async () => {
+    try {
+      
+      await AsyncStorage.setItem("@levelH", currentProgress.health.toString());
+      await AsyncStorage.setItem("@levelA", currentProgress.attack.toString());
+      await AsyncStorage.setItem("@levelD", currentProgress.defence.toString());
+    } catch (error) {
+      console.log("error: ", error.message);
+    }
+  };
+  const loadProgress = async () => {
+    try {
+      const valueH =  AsyncStorage.getItem("@levelH");
+      const valueA =  AsyncStorage.getItem("@levelA");
+      const valueD =  AsyncStorage.getItem("@levelD");
+      const [valueh, valuea, valued] = await Promise.all([valueH,valueA,valueD]);
+      if ((valueh !== null) && (valuea !== null) && (valued !== null)) {
+        setCurrentProgress({attack: parseFloat(valuea), health: parseFloat(valueh),defence: parseFloat(valued)});
+      }
+    } catch (error) {
+      console.log("error: ", error.message);
+    }
+  };
+  const loadLevels = async () => {
+    try {
+      const levelH =  AsyncStorage.getItem("@levelh");
+      const levelA =  AsyncStorage.getItem("@levela");
+      const levelD =  AsyncStorage.getItem("@leveld");
+      const [valueh, valuea, valued] = await Promise.all([levelH,levelA,levelD]);
+      if ((valueh !== null) && (valuea !== null) && (valued !== null)) {
+        setALevel(parseInt(valuea));
+        setHLevel(parseInt(valueh));
+        setDLevel(parseInt(valued));
+      }
+    } catch (error){
+      console.log("error: ", error.message);
+    }
+  };
+
+  const storeLevels = async () => {
+    try {
+      
+      await AsyncStorage.setItem("@levelh", hLevel.toString());
+      await AsyncStorage.setItem("@levela", aLevel.toString());
+      await AsyncStorage.setItem("@leveld", dLevel.toString());
+    } catch (error) {
+      console.log("error: ", error.message);
+    }
+
+  };
+
+
+
+
+
+
+
   const upgradeHealth = () => {
     if (count >= hCost){
     setCount(count - hCost)
@@ -92,6 +158,23 @@ function CastleScreen({ navigation }) {
     setAButton(true);
     setABTitle("Complete");}
   }, [hLevel,aLevel,dLevel]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      storeProgress();
+    }, 1000);
+    return () => clearTimeout(timeout);
+  }, [currentProgress]);
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      storeLevels();
+    }, 1000);
+    return () => clearTimeout(timeout);
+  }, [hLevel,aLevel,dLevel]);
+  useEffect(() => {
+    loadProgress();
+    loadLevels();
+  }, []);
   return (
     <ImageBackground
       source={backgroundimage}
