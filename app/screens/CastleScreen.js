@@ -102,6 +102,7 @@ function CastleScreen({ navigation }) {
           <ProgressBar
             spec="health"
             currentProgress={currentProgresses.health}
+            
           />
           <ProgressBar
             spec="attack"
@@ -109,6 +110,7 @@ function CastleScreen({ navigation }) {
           />
           <ProgressBar
             spec="defence"
+            
             currentProgress={currentProgresses.defence}
           />
           <CountContext.Provider value={{ count }}>
@@ -119,7 +121,7 @@ function CastleScreen({ navigation }) {
               }}
             >
               <View>
-                <Text>Add currency</Text>
+                <Text style={styles.text}>Add currency</Text>
               </View>
             </TouchableHighlight>
           </CountContext.Provider>
@@ -152,6 +154,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: StatusBar.currentHeight,
     alignItems: "center",
+    
   },
   headers: {
     width: 75,
@@ -167,37 +170,23 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  upgradeButton: {
-    width: 75,
-    height: 75,
 
-    margin: "5%",
-
-    backgroundColor: "orange",
-    alignItems: "center",
-    justifyContent: "center",
-    borderColor: "white",
-    borderRadius: 10,
-    borderWidth: 2,
-  },
-  upgradeContainer1: {
-    width: "100%",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 35,
-  },
+  
 
   upgradeContainer2: {
     width: "100%",
     flexDirection: "row",
+    
     alignItems: "center",
-    justifyContent: "flex-start",
-    marginBottom: 35,
-    left: 10,
+    justifyContent: "center",
+    marginBottom: "12%",
+    
   },
 
-  scrollView: {},
+  scrollView: { 
+
+},
+
   text: {
     fontSize: 18,
     fontWeight: "bold",

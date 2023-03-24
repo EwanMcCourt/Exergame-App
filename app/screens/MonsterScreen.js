@@ -282,6 +282,7 @@ const styles = StyleSheet.create({
   scrollView: {
     width:"80%",
     height:"100%",
+    
   },
   text: {
     fontSize: 18,
@@ -292,7 +293,7 @@ const styles = StyleSheet.create({
   },
   container100: {
     backgroundColor: 'red', 
-    height: "25%", 
+    height: 100, 
     width: "100%", 
     marginTop: 20, 
     borderRadius: 10, 
@@ -306,7 +307,7 @@ const styles = StyleSheet.create({
   },
   container101: {
     backgroundColor: 'blue', 
-    height: "25%", 
+    height: 100, 
     width: "100%", 
     marginTop: 20, 
     borderRadius: 10, 
@@ -320,7 +321,7 @@ const styles = StyleSheet.create({
   },
   container102: {
     backgroundColor: 'purple', 
-    height: "25%", 
+    height: 100, 
     width: "100%", 
     marginTop: 20, 
     borderRadius: 10, 
