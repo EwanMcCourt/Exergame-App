@@ -191,16 +191,17 @@ function MonsterScreen({ navigation }) {
           spec="defence"
           currentProgress={currentProgress.defence}
         />
-        <View style={{ backgroundColor: 'red', height: 100, width: 300, marginTop:20, }}>
-          <Text style={{ color: 'white' }}>Health</Text>
+        <View style={styles.container100}>
+          <Text style={{ color: 'white', fontSize:20,fontWeight: 'bold' }}>Health</Text>
           <Text style={{ color: 'white' }}>Cost: {hCost}</Text>
           <Text style={{ color: 'white' }}>Level: {hLevel}/5</Text>
           <View style={{ position: 'absolute', bottom: 0, right: 0 }}>
             <Button title={hBTitle} onPress={() => upgradeHealth()} disabled = {hButton} />
           </View>
         </View>
-        <View style={{ backgroundColor: 'blue', height: 100, width: 300, marginTop:20, }}>
-          <Text style={{ color: 'white' }}>Attack</Text>
+        
+        <View style={styles.container101}>
+          <Text style={{ color: 'white', fontSize:20,fontWeight: 'bold' }}>Attack</Text>
           <Text style={{ color: 'white' }}>Cost: {aCost}</Text>
           <Text style={{ color: 'white' }}>Level: {aLevel}/5</Text>
           <View style={{ position: 'absolute', bottom: 0, right: 0 }}>
@@ -209,8 +210,8 @@ function MonsterScreen({ navigation }) {
               } disabled = {aButton} />
           </View>
         </View>
-        <View style={{ backgroundColor: 'purple', height: 100, width: 300, marginTop:20, }}>
-          <Text style={{ color: 'white' }}>Defence</Text>
+        <View style={styles.container102}>
+          <Text style={{ color: 'white', fontSize:20,fontWeight: 'bold' }}>Defence</Text>
           <Text style={{ color: 'white' }}>Cost: {dCost}</Text>
           <Text style={{ color: 'white' }}>Level: {dLevel}/5</Text>
           <View style={{ position: 'absolute', bottom: 0, right: 0 }}>
@@ -278,7 +279,10 @@ const styles = StyleSheet.create({
     left: 10,
   },
 
-  scrollView: {},
+  scrollView: {
+    width:"80%",
+    height:"100%",
+  },
   text: {
     fontSize: 18,
     fontWeight: "bold",
@@ -286,5 +290,47 @@ const styles = StyleSheet.create({
     borderBottomColor: "white",
  
   },
+  container100: {
+    backgroundColor: 'red', 
+    height: "25%", 
+    width: "100%", 
+    marginTop: 20, 
+    borderRadius: 10, 
+    padding: 10, 
+    marginBottom: 10, 
+    shadowColor: "#000", 
+    shadowOffset: { width: 0, height: 2 }, 
+    shadowOpacity: 0.25, 
+    shadowRadius: 3.84, 
+    elevation: 5
+  },
+  container101: {
+    backgroundColor: 'blue', 
+    height: "25%", 
+    width: "100%", 
+    marginTop: 20, 
+    borderRadius: 10, 
+    padding: 10, 
+    marginBottom: 10, 
+    shadowColor: "#000", 
+    shadowOffset: { width: 0, height: 2 }, 
+    shadowOpacity: 0.25, 
+    shadowRadius: 3.84, 
+    elevation: 5
+  },
+  container102: {
+    backgroundColor: 'purple', 
+    height: "25%", 
+    width: "100%", 
+    marginTop: 20, 
+    borderRadius: 10, 
+    padding: 10, 
+    marginBottom: 10, 
+    shadowColor: "#000", 
+    shadowOffset: { width: 0, height: 2 }, 
+    shadowOpacity: 0.25, 
+    shadowRadius: 3.84, 
+    elevation: 5
+  }
 });
 export default MonsterScreen;
