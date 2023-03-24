@@ -160,7 +160,7 @@ function MainScreen({ navigation }) {
       const now = new Date();
       const pastStepCountResult = await Pedometer.getStepCountAsync(today, now);
       if (pastStepCountResult) {
-        if (pastStepCountResult <= x){
+        if (pastStepCountResult.steps <= x){
         setDailySteps(pastStepCountResult.steps);
         } else {
           setDailySteps(x);
